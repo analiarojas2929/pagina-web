@@ -1,0 +1,16 @@
+.app-shell {
+  background: transparent;
+}
+
+.bg-mesh {
+  background-image:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.14), transparent 28%);
+}
+
+@media (max-width: 768px) {
+  .section-compact {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
