@@ -16,6 +16,18 @@ npm run build
 npm run lint
 ```
 
+## Publicar en GitHub Pages
+
+El despliegue se realiza automáticamente al subir cambios a la rama `main`.
+
+1. En GitHub, abre el repositorio y entra en **Settings → Pages**.
+2. En **Build and deployment → Source**, selecciona **GitHub Actions**.
+3. En VS Code, guarda los cambios y súbelos al repositorio (pestaña **Control de código fuente → Sincronizar cambios**).
+4. En GitHub, abre la pestaña **Actions** y espera a que termine el flujo **Deploy to GitHub Pages**.
+5. La dirección publicada aparecerá en **Settings → Pages**.
+
+La primera publicación puede tardar unos minutos. Cada nuevo cambio que se suba a `main` actualizará el sitio automáticamente.
+
 ## Contenido editable
 
 Los datos visibles del sitio se centralizan en [`src/data/siteData.js`](./src/data/siteData.js):
