@@ -1,431 +1,543 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
+  ArrowDown,
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
-  Briefcase,
-  Code,
-  Compass,
-  Mail,
-  MapPin,
+  Check,
+  ChevronDown,
+  Code2,
+  ExternalLink,
+  Menu,
   MessageCircle,
-  Phone,
-  Rocket,
   ShieldCheck,
   Sparkles,
-  Star,
+  X,
 } from 'lucide-react'
 import QuoteForm from './components/QuoteForm'
 import SectionTitle from './components/SectionTitle'
 import {
-  contactLinks,
-  highlights,
+  brand,
+  createWhatsAppUrl,
+  faqs,
+  founders,
   navItems,
-  plans,
   portfolio,
+  portfolioCategories,
+  plans,
   services,
-  stats,
-  whatsappNumber,
+  workflow,
 } from './data/siteData'
 import './App.css'
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
+const reveal = {
+  hidden: { opacity: 0, y: 22 },
   visible: { opacity: 1, y: 0 },
 }
 
-function App() {
+const currentYear = new Date().getFullYear()
+
+function ActionLink({ children, href = '#cotizacion', secondary = false, ...props }) {
   return (
-    <div className="min-h-screen bg-[#050d18] text-slate-100">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <a href="#inicio" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-violet-500 font-black text-slate-950">
-              AR
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Analia Rojas</p>
-              <p className="text-sm font-medium text-white">Soluciones Digitales</p>
-            </div>
+    <a
+      href={href}
+      className={`action-link ${secondary ? 'action-link-secondary' : 'action-link-primary'}`}
+      {...props}
+    >
+      {children}
+    </a>
+  )
+}
+
+function SectionCta({ text = '¿Tienes un proyecto en mente?' }) {
+  return (
+    <div className="section-cta">
+      <span>{text}</span>
+      <ActionLink>
+        Hablemos de tu proyecto <ArrowRight size={16} aria-hidden="true" />
+      </ActionLink>
+    </div>
+  )
+}
+
+function ProjectArtwork({ project, index }) {
+  if (project.image) {
+    return (
+      <div className={`project-artwork project-artwork-${index + 1}`}>
+        <img src={project.image} alt={`Vista previa de ${project.title}`} loading="lazy" />
+      </div>
+    )
+  }
+
+  return (
+    <div className={`project-artwork project-artwork-${index + 1}`} aria-hidden="true">
+      <div className="artwork-window">
+        <div className="artwork-toolbar">
+          <span />
+          <span />
+          <span />
+          <small>{project.category}</small>
+        </div>
+        <div className="artwork-content">
+          <div className="artwork-sidebar">
+            <i />
+            <i />
+            <i />
+            <i />
+          </div>
+          <div className="artwork-main">
+            <span className="artwork-overline">A&amp;D DIGTAL · EXPERIENCIA</span>
+            <strong>{project.title}</strong>
+            <div className="artwork-lines"><i /><i /><i /></div>
+            <div className="artwork-blocks"><i /><i /><i /></div>
+          </div>
+        </div>
+      </div>
+      <span className="artwork-label">Previsualización gráfica · no es una captura</span>
+    </div>
+  )
+}
+
+function App() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [selectedService, setSelectedService] = useState('')
+  const [activeProjectCategory, setActiveProjectCategory] = useState('founders')
+  const visiblePortfolio = portfolio.filter((project) => project.group === activeProjectCategory)
+  const projectEmptyMessage = activeProjectCategory === 'agency'
+    ? 'Aún no hemos añadido proyectos comerciales de A&D DIGTAL. Las referencias disponibles se muestran como experiencia de las fundadoras.'
+    : 'Las demos comerciales se publicarán aquí cuando estén disponibles.'
+
+  const selectService = (serviceTitle) => {
+    setSelectedService(serviceTitle)
+  }
+
+  return (
+    <div className="site-shell">
+      <header className="site-header">
+        <div className="header-inner">
+          <a href="#inicio" className="brand" aria-label={`${brand.name}, inicio`}>
+            <span className="brand-wordmark">A&amp;D <span>DIGTAL</span></span>
+            <span className="brand-copy">
+              <strong>{brand.slogan}</strong>
+              <small>Agencia digital · Chile</small>
+            </span>
           </a>
 
-          <nav className="hidden items-center gap-6 text-sm text-slate-200 lg:flex">
+          <nav id="mobile-menu" className={`main-nav ${menuOpen ? 'main-nav-open' : ''}`} aria-label="Navegación principal">
             {navItems.map((item) => (
-              <a key={item.href} href={item.href} className="transition hover:text-cyan-300">
+              <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
                 {item.label}
               </a>
             ))}
+            <ActionLink onClick={() => setMenuOpen(false)}>
+              Cotizar proyecto <ArrowUpRight size={16} aria-hidden="true" />
+            </ActionLink>
           </nav>
 
-          <a
-            href="#cotizacion"
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:scale-[1.02]"
+          <button
+            type="button"
+            className="menu-toggle"
+            aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((open) => !open)}
           >
-            Cotizar proyecto
-            <ArrowRight size={16} />
-          </a>
+            {menuOpen ? <X size={21} /> : <Menu size={21} />}
+          </button>
         </div>
       </header>
 
       <main>
-        <section id="inicio" className="relative overflow-hidden bg-mesh">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.2),transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(139,92,246,0.2),transparent_35%)]" />
-          <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-28">
+        <section id="inicio" className="hero-section">
+          <div className="hero-grid-pattern" aria-hidden="true" />
+          <div className="container hero-layout">
             <motion.div
+              className="hero-copy"
               initial="hidden"
               animate="visible"
-              variants={fadeInUp}
-              transition={{ duration: 0.7 }}
-              className="flex flex-col justify-center"
+              variants={reveal}
+              transition={{ duration: 0.65, ease: 'easeOut' }}
             >
-              <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
-                <Sparkles size={14} />
-                Tecnología con propósito
-              </span>
-
-              <h1 className="max-w-xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Desarrollo digital que transforma ideas en resultados reales.
-              </h1>
-
-              <p className="mt-6 max-w-xl text-lg text-slate-300">
-                Soy Analia Rojas, Ingeniera en Informática, y diseño soluciones web, sistemas y experiencias digitales que impulsan marcas y negocios.
+              <p className="eyebrow"><span className="eyebrow-dot" /> {brand.slogan.toUpperCase()}</p>
+              <h1>Transformamos tus ideas en <span>soluciones digitales</span></h1>
+              <p className="hero-description">
+                En A&amp;D DIGTAL desarrollamos páginas web, software y experiencias digitales que ayudan a emprendedores y empresas a crecer.
               </p>
-
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <a
-                  href="#cotizacion"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 px-6 py-3.5 font-semibold text-slate-950 transition hover:scale-[1.02]"
-                >
-                  Solicitar cotización
-                  <ArrowRight size={18} />
-                </a>
-                <a
-                  href="#portafolio"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3.5 font-semibold text-white transition hover:border-cyan-400/40 hover:text-cyan-300"
-                >
-                  Ver portafolio
-                </a>
+              <div className="hero-actions">
+                <ActionLink>
+                  Solicitar cotización <ArrowUpRight size={17} aria-hidden="true" />
+                </ActionLink>
+                <ActionLink href="#servicios" secondary>
+                  Explorar servicios <ArrowDown size={16} aria-hidden="true" />
+                </ActionLink>
+                <ActionLink href="#proyectos" secondary>
+                  Ver proyectos <ArrowDown size={16} aria-hidden="true" />
+                </ActionLink>
               </div>
-
-              <div className="mt-10 flex flex-wrap gap-5 text-sm text-slate-300">
-                {highlights.map((item) => (
-                  <div key={item} className="inline-flex items-center gap-2">
-                    <BadgeCheck className="text-cyan-300" size={16} />
-                    <span>{item}</span>
-                  </div>
-                ))}
+              <div className="trust-row" aria-label="Valores de A&D DIGTAL">
+                <span><BadgeCheck size={17} /> Equipo de dos fundadoras</span>
+                <span><BadgeCheck size={17} /> Desarrollo personalizado</span>
+                <span><BadgeCheck size={17} /> Atención cercana</span>
               </div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.94 }}
+              className="hero-visual"
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="relative"
+              transition={{ duration: 0.7, delay: 0.1 }}
+              aria-hidden="true"
             >
-              <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-cyan-500/20 via-transparent to-violet-500/20 blur-2xl" />
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/50 p-5 shadow-glow backdrop-blur-xl">
-                <div className="rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-5">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Dashboard</p>
-                      <h3 className="mt-2 text-xl font-semibold text-white">Proyecto en crecimiento</h3>
-                    </div>
-                    <div className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300">
-                      Online
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                    {stats.map((stat) => (
-                      <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                        <p className="text-2xl font-bold text-white">{stat.value}</p>
-                        <p className="mt-2 text-xs text-slate-300">{stat.label}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-6 rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-5">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-slate-300">Estrategia actual</p>
-                        <p className="mt-2 text-xl font-semibold text-white">Creación de presencia digital</p>
-                      </div>
-                      <Rocket className="text-cyan-300" size={28} />
-                    </div>
-
-                    <div className="mt-6 space-y-4">
-                      {[
-                        'Diseño UX/UI premium',
-                        'Integración de ventas y lead gen',
-                        'Automatización y sistemas eficientes',
-                      ].map((item, index) => (
-                        <div key={item} className="flex items-center gap-3 text-sm text-slate-200">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-violet-500 text-slate-950">
-                            {index + 1}
-                          </div>
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              <div className="hero-card">
+                <div className="hero-card-top">
+                  <div className="hero-card-brand"><span>A&amp;D</span> DIGITAL STUDIO</div>
+                  <div className="hero-card-menu"><i /><i /><i /></div>
+                </div>
+                <div className="hero-card-body">
+                  <span className="hero-card-kicker">IDEA · ESTRATEGIA · DESARROLLO</span>
+                  <div className="hero-card-heading">Tu próximo<br /><b>proyecto digital.</b></div>
+                  <div className="hero-card-subline" />
+                  <div className="hero-card-button">Hablemos <ArrowUpRight size={13} /></div>
+                </div>
+                <div className="hero-card-footer">
+                  <span>A&amp;D DIGTAL</span><span>TECNOLOGÍA A MEDIDA</span>
                 </div>
               </div>
+              <div className="hero-float-card"><span><Code2 size={16} /></span> Tecnología para impulsar tus ideas</div>
             </motion.div>
           </div>
+          <div className="hero-bottom-line" />
         </section>
 
-        <section id="servicios" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <SectionTitle
-            eyebrow="Servicios"
-            title="Soluciones digitales pensadas para crecer"
-            description="Desde sitios web profesionales hasta sistemas a medida, cada proyecto se diseña con estrategia, creatividad y tecnología sólida."
-          />
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {services.map(({ icon: Icon, title, description }) => (
-              <motion.article
-                key={title}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5 }}
-                className="group rounded-3xl border border-white/10 bg-white/5 p-6 shadow-lg transition hover:-translate-y-1 hover:border-cyan-400/40"
-              >
-                <div className="mb-5 inline-flex rounded-2xl bg-gradient-to-br from-cyan-500/20 to-violet-500/20 p-3 text-cyan-300">
-                  <Icon size={26} />
-                </div>
-                <h3 className="text-xl font-semibold text-white">{title}</h3>
-                <p className="mt-3 text-slate-300">{description}</p>
-              </motion.article>
-            ))}
+        <section className="benefits-section">
+          <div className="container benefits-grid">
+            <div><span className="benefit-icon"><Sparkles size={18} /></span><div><strong>Soluciones a medida</strong><small>Desarrollo alineado a tu proyecto</small></div></div>
+            <div><span className="benefit-icon"><ShieldCheck size={18} /></span><div><strong>Trabajo colaborativo</strong><small>Comunicación cercana con las socias</small></div></div>
+            <div><span className="benefit-icon"><Check size={18} /></span><div><strong>Alcance transparente</strong><small>Propuesta clara antes de empezar</small></div></div>
           </div>
         </section>
 
-        <section id="planes" className="bg-slate-950/50 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section id="servicios" className="content-section">
+          <div className="container">
             <SectionTitle
-              eyebrow="Planes"
-              title="Opciones para cada etapa de tu negocio"
-              description="Elige la estructura que mejor se adapte a tus objetivos, presupuesto y nivel de crecimiento actual."
+              eyebrow="Servicios y precios"
+              title="Servicios pensados para impulsar tu negocio"
+              description="Diseñamos y desarrollamos soluciones digitales para emprendedores y empresas, desde una página web hasta software a medida."
             />
-
-            <div className="grid gap-6 lg:grid-cols-3">
-              {plans.map((plan) => (
-                <div
-                  key={plan.name}
-                  className={`rounded-[2rem] border p-6 ${
-                    plan.highlighted
-                      ? 'border-cyan-400/40 bg-gradient-to-b from-cyan-500/10 to-violet-500/10 shadow-glow'
-                      : 'border-white/10 bg-white/5'
-                  }`}
+            <div className="services-grid">
+              {services.map(({ icon: Icon, title, price, description, includes }, index) => (
+                <motion.article
+                  className={`service-card ${index === 2 ? 'service-card-featured' : ''}`}
+                  key={title}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.12 }}
+                  variants={reveal}
+                  transition={{ duration: 0.45, delay: (index % 3) * 0.07 }}
                 >
-                  <p className="text-sm uppercase tracking-[0.2em] text-cyan-300">{plan.name}</p>
-                  <div className="mt-6 flex items-end gap-2">
-                    <span className="text-4xl font-black text-white">{plan.price}</span>
-                  </div>
-                  <p className="mt-4 text-slate-300">{plan.description}</p>
-
-                  <ul className="mt-6 space-y-3 text-slate-200">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-3">
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/15 text-cyan-300">
-                          <BadgeCheck size={14} />
-                        </span>
-                        {feature}
-                      </li>
-                    ))}
+                  <div className="service-icon"><Icon size={20} aria-hidden="true" /></div>
+                  <h3>{title}</h3>
+                  <p className="service-description">{description}</p>
+                  <p className="service-price">{price}</p>
+                  <ul className="service-includes">
+                    {includes.map((feature) => <li key={feature}><Check size={15} />{feature}</li>)}
                   </ul>
-
                   <a
+                    className="service-link"
                     href="#cotizacion"
-                    className={`mt-8 inline-flex w-full items-center justify-center rounded-full px-5 py-3 font-semibold transition ${
-                      plan.highlighted
-                        ? 'bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 text-slate-950'
-                        : 'border border-white/15 bg-white/5 text-white hover:border-cyan-400/40'
-                    }`}
+                    onClick={() => selectService(title)}
                   >
-                    Elegir plan
+                    Solicitar cotización <ArrowRight size={16} aria-hidden="true" />
                   </a>
-                </div>
+                </motion.article>
+              ))}
+            </div>
+            <p className="pricing-note">
+              Solicita una cotización para definir el alcance de tu servicio. Dominio, hosting y servicios externos se cotizan por separado.
+            </p>
+            <SectionCta text="¿No sabes qué servicio se ajusta a tu idea?" />
+          </div>
+        </section>
+
+        <section id="planes" className="content-section pricing-section">
+          <div className="container">
+            <SectionTitle
+              eyebrow="Planes y precios"
+              title="Precios iniciales claros"
+              description="Valores de referencia editables. Cada proyecto se cotiza de acuerdo con su alcance y necesidades."
+            />
+            <div className="plans-grid">
+              {plans.map((plan) => (
+                <article className={`plan-card ${plan.featured ? 'plan-card-featured' : ''}`} key={plan.title}>
+                  <p className="plan-kicker">A&amp;D DIGTAL</p>
+                  <h3>{plan.title}</h3>
+                  <p className="plan-price">{plan.price}</p>
+                  <p className="plan-description">{plan.description}</p>
+                  <a
+                    className="plan-link"
+                    href="#cotizacion"
+                    onClick={() => selectService(plan.service)}
+                  >
+                    Solicitar cotización <ArrowRight size={15} aria-hidden="true" />
+                  </a>
+                </article>
+              ))}
+            </div>
+            <p className="pricing-note">
+              Los precios publicados son iniciales y dependen del alcance del proyecto. Dominio, hosting y servicios externos se cotizan por separado.
+            </p>
+            <SectionCta text="Cuéntanos qué necesitas y te preparamos una propuesta." />
+          </div>
+        </section>
+
+        <section id="proyectos" className="content-section projects-section">
+          <div className="container">
+            <SectionTitle
+              eyebrow="Proyectos"
+              title="Experiencia y demos de las fundadoras"
+              description="Referencias de experiencia técnica de las fundadoras, no proyectos comerciales realizados por A&amp;D DIGTAL. Las demos solo se enlazan cuando hay una dirección disponible."
+            />
+            <div className="project-filters" role="group" aria-label="Filtrar proyectos">
+              {portfolioCategories.map((category) => (
+                <button
+                  type="button"
+                  className={activeProjectCategory === category.id ? 'project-filter project-filter-active' : 'project-filter'}
+                  key={category.id}
+                  aria-pressed={activeProjectCategory === category.id}
+                  onClick={() => setActiveProjectCategory(category.id)}
+                >
+                  {category.label}
+                </button>
+              ))}
+            </div>
+            {visiblePortfolio.length === 0 && (
+              <p className="project-empty-state">
+                {projectEmptyMessage}
+              </p>
+            )}
+            <div className="projects-grid">
+              {visiblePortfolio.map((project, index) => (
+                <motion.article
+                  className="project-card"
+                  key={project.title}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.1 }}
+                  variants={reveal}
+                  transition={{ duration: 0.45, delay: (index % 2) * 0.08 }}
+                >
+                  <ProjectArtwork project={project} index={index} />
+                  <div className="project-content">
+                    <div className="project-heading">
+                      <div><span className="project-category">{project.category}</span><h3>{project.title}</h3></div>
+                      {project.demoUrl && <span className="access-badge">Demo disponible</span>}
+                      {!project.demoUrl && <span className="access-badge access-unavailable">Sin demo disponible</span>}
+                    </div>
+                    <p className="project-description">{project.description}</p>
+                    <div className="project-details">
+                      <div><small>TECNOLOGÍAS</small><div className="tag-list">
+                        {project.technologies.length
+                          ? project.technologies.map((technology) => <span key={technology}>{technology}</span>)
+                          : <span>Detalles no especificados</span>}
+                      </div></div>
+                      <div><small>ENFOQUE</small><div className="tag-list">
+                        {project.features.map((feature) => <span key={feature}>{feature}</span>)}
+                      </div></div>
+                    </div>
+                    <div className="project-actions">
+                      {project.demoUrl && (
+                        <a className="project-demo" href={project.demoUrl} target="_blank" rel="noreferrer">
+                          Ver proyecto <ExternalLink size={15} aria-hidden="true" />
+                        </a>
+                      )}
+                      {!project.demoUrl && <span className="project-unavailable">Demo no disponible</span>}
+                      <a
+                        className="similar-link"
+                        href={createWhatsAppUrl(`Hola, nos interesa conversar con A&D DIGTAL sobre un proyecto similar a ${project.title}.`)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Solicitar uno similar <ArrowUpRight size={15} aria-hidden="true" />
+                      </a>
+                    </div>
+                    {project.demoLabel && <p className="demo-note">{project.demoLabel}</p>}
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+            <SectionCta text="Hagamos realidad una idea como estas, adaptada a tu negocio." />
+          </div>
+        </section>
+
+        <section id="proceso" className="content-section process-section">
+          <div className="container">
+            <SectionTitle
+              eyebrow="Nuestra metodología"
+              title="Un proceso claro, de principio a fin"
+              description="En cada etapa colaboramos contigo para que sepas qué esperar y qué estamos construyendo."
+            />
+            <div className="workflow-grid">
+              {workflow.map((step, index) => (
+                <motion.article
+                  className="workflow-step"
+                  key={step.number}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  variants={reveal}
+                  transition={{ duration: 0.4, delay: index * 0.06 }}
+                >
+                  <span className="step-number">{step.number}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
+                </motion.article>
+              ))}
+            </div>
+            <SectionCta text="El primer paso es una conversación." />
+          </div>
+        </section>
+
+        <section id="equipo" className="content-section team-section">
+          <div className="container">
+            <SectionTitle
+              eyebrow="Sobre nosotras"
+              title="Las profesionales detrás de A&amp;D DIGTAL"
+              description="Somos dos socias fundadoras y profesionales del área tecnológica."
+            />
+            <div className="founders-grid">
+              {founders.map((founder, index) => (
+                <motion.article
+                  className="founder-card"
+                  key={`${founder.name}-${index}`}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  variants={reveal}
+                  transition={{ duration: 0.45, delay: index * 0.08 }}
+                >
+                  <div className={`founder-avatar founder-avatar-${index + 1}`}>
+                    {founder.photo
+                      ? <img src={founder.photo} alt={`Fotografía de ${founder.name}`} loading="lazy" />
+                      : <span aria-hidden="true">{founder.initials}</span>}
+                  </div>
+                  <div className="founder-info">
+                    <span className="founder-label">SOCIA FUNDADORA</span>
+                    <h3>{founder.name}</h3>
+                    <p className="founder-role">{founder.role}</p>
+                    <p className="founder-position">{founder.position}</p>
+                    <p className="founder-bio">{founder.bio}</p>
+                    <div className="founder-details">
+                      <strong>Especialidades</strong>
+                      <p>{founder.specialties.length ? founder.specialties.join(' · ') : 'Información pendiente de completar'}</p>
+                    </div>
+                    <div className="founder-socials">
+                      {founder.linkedin
+                        ? <a className="founder-link" href={founder.linkedin} target="_blank" rel="noreferrer">LinkedIn <ExternalLink size={13} /></a>
+                        : <span className="founder-link founder-link-pending">LinkedIn por agregar</span>}
+                      {founder.github
+                        ? <a className="founder-link" href={founder.github} target="_blank" rel="noreferrer">GitHub <ExternalLink size={13} /></a>
+                        : <span className="founder-link founder-link-pending">GitHub por agregar</span>}
+                    </div>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+            <div className="team-message">
+              <span className="benefit-icon"><Sparkles size={18} /></span>
+              <p><strong>{brand.slogan}</strong><br />En A&amp;D DIGTAL somos dos profesionales del área tecnológica que unimos nuestros conocimientos y nuestra pasión por la innovación para transformar ideas en soluciones digitales. Nuestro propósito es ayudar a emprendedores, profesionales y empresas a fortalecer su presencia digital mediante el desarrollo de páginas web, software y herramientas tecnológicas adaptadas a sus necesidades.</p>
+            </div>
+            <SectionCta text="Conversemos sobre lo que podemos crear en equipo." />
+          </div>
+        </section>
+
+        <section className="content-section faq-section">
+          <div className="container faq-layout">
+            <div>
+              <SectionTitle
+                eyebrow="Preguntas frecuentes"
+                title="Resolvamos tus dudas"
+                description="Si necesitas aclarar algo más, conversemos directamente sobre tu proyecto."
+                align="left"
+              />
+              <ActionLink>Solicitar cotización <ArrowRight size={16} /></ActionLink>
+            </div>
+            <div className="faq-list">
+              {faqs.map((faq) => (
+                <details className="faq-item" key={faq.question}>
+                  <summary>{faq.question}<ChevronDown size={18} aria-hidden="true" /></summary>
+                  <p>{faq.answer}</p>
+                </details>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="portafolio" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <SectionTitle
-            eyebrow="Portafolio"
-            title="Proyectos con impacto visual y funcional"
-            description="Casos que representan la combinación perfecta entre estrategia digital, diseño moderno y experiencias orientadas a resultados."
-          />
-
-          <div className="grid gap-6 md:grid-cols-2">
-            {portfolio.map((project, index) => (
-              <motion.article
-                key={project.title}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/60"
-              >
-                <div className="h-48 bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-violet-500/20 p-6">
-                  <div className="flex h-full items-end justify-between rounded-[1.5rem] border border-white/10 bg-slate-950/60 p-4">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.22em] text-cyan-300">{project.category}</p>
-                      <h3 className="mt-3 text-2xl font-semibold text-white">{project.title}</h3>
-                    </div>
-                    <Star className="text-cyan-300" size={22} />
-                  </div>
-                </div>
-                <div className="p-6">
-                  <p className="text-slate-300">{project.description}</p>
-                </div>
-              </motion.article>
-            ))}
+        <section id="cotizacion" className="quote-section">
+          <div className="container quote-layout">
+            <div className="quote-copy">
+              <p className="eyebrow"><span className="eyebrow-dot" /> COTIZACIÓN PERSONALIZADA</p>
+              <h2>Cuéntanos qué quieren construir.</h2>
+              <p>
+                Comparte los detalles de tu idea. Prepararemos un mensaje con la información para
+                que lo revises y lo envíes por WhatsApp.
+              </p>
+              <div className="quote-assurance">
+                <span><ShieldCheck size={19} /></span>
+                <p><strong>Sin compromiso</strong><br />Revisaremos el alcance antes de definir la propuesta.</p>
+              </div>
+            </div>
+            <QuoteForm key={selectedService || 'default'} initialService={selectedService} />
           </div>
         </section>
 
-        <section id="sobre-mi" className="bg-slate-950/60 py-20">
-          <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
-            <div className="rounded-[2rem] border border-cyan-500/20 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-6 shadow-glow">
-              <div className="flex h-full min-h-[420px] flex-col justify-between rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-cyan-500/10 via-transparent to-violet-500/10 p-5">
-                <div className="inline-flex w-fit rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-cyan-300">
-                  Sobre mí
-                </div>
-                <div className="mt-8 flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-violet-500 text-2xl font-black text-slate-950">
-                    AR
-                  </div>
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Ingeniera en Informática</p>
-                    <h3 className="mt-1 text-2xl font-bold text-white">Analia Rojas</h3>
-                  </div>
-                </div>
-                <div className="mt-6 grid gap-3 text-sm text-slate-300">
-                  <div className="flex items-center gap-3"><MapPin size={16} className="text-cyan-300" /> Argentina</div>
-                  <div className="flex items-center gap-3"><Mail size={16} className="text-cyan-300" /> analia@solucionesdigitales.com</div>
-                  <div className="flex items-center gap-3"><Phone size={16} className="text-cyan-300" /> +54 9 11 2345 6789</div>
-                </div>
-              </div>
+        <section id="contacto" className="contact-section">
+          <div className="container contact-inner">
+            <div>
+              <p className="eyebrow">CONTACTO</p>
+              <h2>¿Listas para empezar?</h2>
+              <p>Conversemos sobre tu proyecto y encontremos el siguiente paso.</p>
             </div>
-
-            <div className="flex flex-col justify-center">
-              <SectionTitle
-                eyebrow="Perfil"
-                title="Diseño soluciones con estrategia, claridad y tecnología de alto nivel."
-              />
-
-              <div className="space-y-5 text-lg text-slate-300">
-                <p>
-                  Me apasiona crear experiencias digitales que conecten con la audiencia, generen confianza y apoyen el crecimiento real de cada negocio.
-                </p>
-                <p>
-                  Mi enfoque combina diseño, desarrollo, análisis de negocio y atención a la experiencia de usuario para entregar productos funcionales, elegantes y listos para escalar.
-                </p>
-              </div>
-
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <Code className="text-cyan-300" size={22} />
-                  <h4 className="mt-4 text-lg font-semibold text-white">Tecnología</h4>
-                  <p className="mt-2 text-slate-300">React, Vite, Tailwind, JavaScript, lógica empresarial y front-end moderno.</p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <Compass className="text-cyan-300" size={22} />
-                  <h4 className="mt-4 text-lg font-semibold text-white">Estrategia</h4>
-                  <p className="mt-2 text-slate-300">Diseño centrado en objetivos, conversiones, usabilidad y mejor experiencia digital.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="cotizacion" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="space-y-6">
-              <SectionTitle
-                eyebrow="Cotización"
-                title="Hablemos sobre tu próximo proyecto"
-                description="Si tu idea necesita una presencia web sólida, una mejor experiencia o un sistema a medida, te ayudo a definir la mejor solución."
-              />
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <ShieldCheck className="mt-1 text-cyan-300" size={22} />
-                  <div>
-                    <h3 className="font-semibold text-white">Proceso claro y transparente</h3>
-                    <p className="mt-2 text-slate-300">Te acompaño desde la estrategia inicial hasta la entrega final y el soporte posterior.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <Briefcase className="mt-1 text-cyan-300" size={22} />
-                  <div>
-                    <h3 className="font-semibold text-white">Solución a medida</h3>
-                    <p className="mt-2 text-slate-300">Cada proyecto se adapta a tu negocio, objetivos, plazo y presupuesto.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <QuoteForm />
-          </div>
-        </section>
-
-        <section id="contacto" className="bg-slate-950/70 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionTitle
-              eyebrow="Contacto"
-              title="Conectemos para llevar tu proyecto al siguiente nivel"
-            />
-
-            <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                {contactLinks.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center text-slate-200 transition hover:border-cyan-400/40 hover:text-cyan-300"
-                  >
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/25 to-violet-500/25 font-bold text-cyan-300">
-                      {item.icon}
-                    </span>
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-
+            <div className="contact-actions">
               <a
-                href={`https://wa.me/${whatsappNumber}`}
+                className="contact-button"
+                href={createWhatsAppUrl('Hola A&D DIGTAL, quisiera conversar sobre un proyecto.')}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-500 px-6 py-3.5 font-semibold text-slate-950 transition hover:scale-[1.02]"
               >
-                <MessageCircle size={18} />
-                Chatear por WhatsApp
+                <MessageCircle size={18} /> Contactar por WhatsApp <ArrowUpRight size={16} />
               </a>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-white/10 bg-slate-950/90">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 text-sm text-slate-300 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <div>
-            <p className="font-semibold text-white">Analia Rojas | Soluciones Digitales</p>
-            <p className="mt-2">Diseño, tecnología y estrategia para hacer crecer tu presencia digital.</p>
+      <footer className="site-footer">
+        <div className="container footer-inner">
+          <a href="#inicio" className="brand footer-brand">
+            <span className="brand-wordmark">A&amp;D <span>DIGTAL</span></span>
+            <span className="brand-copy"><strong>{brand.slogan}</strong><small>Agencia digital · Chile</small></span>
+          </a>
+          <p>{brand.slogan} · {brand.location}</p>
+          <div className="footer-links">
+            <a href="#servicios">Servicios</a>
+            <a href="#proyectos">Proyectos</a>
+            <a href="#equipo">Equipo</a>
+            <a href="#cotizacion">Cotizar</a>
           </div>
-
-          <div className="flex items-center gap-4">
-            <a href="#inicio" className="transition hover:text-cyan-300">Inicio</a>
-            <a href="#servicios" className="transition hover:text-cyan-300">Servicios</a>
-            <a href="#portafolio" className="transition hover:text-cyan-300">Portafolio</a>
-            <a href="#cotizacion" className="transition hover:text-cyan-300">Cotización</a>
-          </div>
+          <small className="copyright">© {currentYear} {brand.name}</small>
         </div>
       </footer>
+      <a
+        className="floating-whatsapp"
+        href={createWhatsAppUrl('Hola A&D DIGTAL, quisiera conversar sobre un proyecto.')}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Contactar a A&D DIGTAL por WhatsApp"
+      >
+        <MessageCircle size={20} aria-hidden="true" />
+        <span>Hablemos</span>
+      </a>
     </div>
   )
 }

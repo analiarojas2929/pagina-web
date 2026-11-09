@@ -1,16 +1,33 @@
-# React + Vite
+# A&D DIGTAL
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Sitio web comercial de A&D DIGTAL, agencia digital en Valparaíso, Chile. Presenta servicios, precios iniciales, experiencia de las fundadoras, metodología y un cotizador que prepara una solicitud para enviar por WhatsApp.
 
-Currently, two official plugins are available:
+## Desarrollo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+Para comprobar la versión de producción y ejecutar el linter:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm run build
+npm run lint
+```
 
-## Expanding the Oxlint configuration
+## Contenido editable
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Los datos visibles del sitio se centralizan en [`src/data/siteData.js`](./src/data/siteData.js):
+
+- `brand`: nombre, eslogan, ubicación y número de WhatsApp de la agencia.
+- `services` y `plans`: descripciones, beneficios y precios iniciales.
+- `portfolio` y `portfolioCategories`: referencias, tecnologías, demos, clasificación e imágenes.
+- `founders`: nombres, cargos, biografías, especialidades, fotografías y perfiles de LinkedIn.
+- `workflow` y `faqs`: metodología y preguntas frecuentes.
+
+Las imágenes de proyectos y perfiles usan rutas locales cuando estén disponibles. Si `image` o `photo` están vacíos, la página muestra una previsualización tipográfica o un avatar ilustrativo, no una captura ni una fotografía real.
+
+## Cotizaciones
+
+El formulario valida los campos y genera un enlace de WhatsApp con los datos ingresados. No existe un backend y el mensaje no se envía automáticamente: la persona debe revisarlo y enviarlo desde WhatsApp. El número de destino se configura en `brand.whatsappNumber`.

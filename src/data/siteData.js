@@ -1,135 +1,254 @@
 import {
+  BarChart3,
   BriefcaseBusiness,
   Code2,
-  Globe,
-  Palette,
-  ShoppingCart,
-  Sparkles,
-  Zap,
+  Globe2,
+  LayoutTemplate,
+  LifeBuoy,
+  MonitorCog,
+  ShoppingBag,
 } from 'lucide-react'
 
+export const brand = {
+  name: 'A&D DIGTAL',
+  slogan: 'Soluciones digitales que impulsan tus ideas',
+  whatsappNumber: '56949275045',
+  location: 'Valparaíso, Chile',
+}
+
 export const navItems = [
-  { label: 'Inicio', href: '#inicio' },
   { label: 'Servicios', href: '#servicios' },
-  { label: 'Planes', href: '#planes' },
-  { label: 'Portafolio', href: '#portafolio' },
-  { label: 'Sobre mí', href: '#sobre-mi' },
-  { label: 'Cotización', href: '#cotizacion' },
-  { label: 'Contacto', href: '#contacto' },
+  { label: 'Precios', href: '#planes' },
+  { label: 'Proyectos', href: '#proyectos' },
+  { label: 'Metodología', href: '#proceso' },
+  { label: 'Equipo', href: '#equipo' },
 ]
 
 export const services = [
   {
-    icon: Code2,
-    title: 'Desarrollo de software',
-    description:
-      'Soluciones a medida para automatizar procesos, mejorar productividad y escalar tu negocio.',
+    icon: Globe2,
+    title: 'Desarrollo de páginas web',
+    description: 'Sitios profesionales para comunicar tu propuesta y generar confianza online.',
+    includes: ['Diseño adaptable', 'Secciones a la medida', 'Integración de contacto'],
   },
   {
-    icon: Globe,
-    title: 'Páginas web profesionales',
-    description:
-      'Sitios modernos, rápidos y optimizados para generar confianza, leads y presencia digital sólida.',
+    icon: LayoutTemplate,
+    title: 'Landing pages',
+    description: 'Páginas enfocadas en presentar una oferta y facilitar el contacto con tus clientes.',
+    includes: ['Estructura enfocada en conversión', 'Diseño responsive', 'Llamados a la acción'],
   },
   {
     icon: BriefcaseBusiness,
-    title: 'Portafolios personales',
-    description:
-      'Diseños premium para profesionales, freelances y especialistas que buscan destacar en línea.',
+    title: 'Portafolios profesionales',
+    description: 'Una presencia online para mostrar tu trabajo, experiencia y formas de contacto.',
+    includes: ['Perfil y presentación', 'Galería o proyectos', 'Enlaces de contacto'],
   },
   {
-    icon: ShoppingCart,
+    icon: ShoppingBag,
     title: 'Tiendas online',
-    description:
-      'E-commerce funcional, atractivo y pensado para vender mejor con una experiencia fluida.',
+    description: 'Experiencias de compra digitales ajustadas a tus productos y operación.',
+    includes: ['Catálogo y estructura a definir', 'Flujo de compra según alcance', 'Integraciones a evaluar'],
   },
   {
-    icon: Sparkles,
-    title: 'Sistemas personalizados',
-    description:
-      'Plataformas adaptadas a tus procesos internos, procesos, usuarios y objetivos empresariales.',
+    icon: Code2,
+    title: 'Software a medida',
+    description: 'Desarrollo de soluciones digitales según los requerimientos de tu negocio.',
+    includes: ['Levantamiento de requerimientos', 'Funcionalidades personalizadas', 'Alcance definido en cotización'],
   },
   {
-    icon: Zap,
-    title: 'Optimización y soporte',
-    description:
-      'Mejoras continuas, mantenimiento y ajustes para mantener tu producto siempre actualizado y eficiente.',
+    icon: MonitorCog,
+    title: 'Sistemas de gestión',
+    description: 'Herramientas digitales que responden a procesos y necesidades concretas.',
+    includes: ['Flujos de trabajo a medida', 'Gestión según requerimientos', 'Propuesta por alcance'],
+  },
+  {
+    icon: BarChart3,
+    title: 'Menús digitales',
+    description: 'Presenta tus productos y servicios en un formato fácil de consultar desde el celular.',
+    includes: ['Diseño móvil', 'Secciones de productos o servicios', 'Acceso mediante enlace o QR'],
+  },
+  {
+    icon: LifeBuoy,
+    title: 'Mantenimiento web',
+    description: 'Acompañamiento para mantener tu sitio actualizado y funcionando.',
+    includes: ['Revisión según necesidades', 'Ajustes acordados', 'Soporte por cotización'],
   },
 ]
 
 export const plans = [
   {
-    name: 'Básico',
-    price: 'Desde $350',
-    description: 'Ideal para un sitio simple y claro.',
-    features: ['Landing page', 'Diseño responsive', 'Formulario de contacto', 'SEO básico', 'Soporte inicial'],
-    highlighted: false,
+    title: 'Menú digital',
+    service: 'Menús digitales',
+    price: 'Desde $35.000 CLP',
+    description: 'Para mostrar tu oferta de forma clara y accesible.',
+    featured: false,
   },
   {
-    name: 'Profesional',
-    price: 'Desde $950',
-    description: 'Perfecto para negocios con mayor presencia digital.',
-    features: ['Sitio completo', 'Secciones de servicios', 'Portafolio y testimonios', 'Integración de WhatsApp', 'Optimización UX/UI'],
-    highlighted: true,
+    title: 'Portafolio profesional',
+    service: 'Portafolios profesionales',
+    price: 'Desde $60.000 CLP',
+    description: 'Presenta tu trabajo y facilita que te contacten.',
+    featured: false,
   },
   {
-    name: 'Personalizado',
-    price: 'A medida',
-    description: 'Solución exclusiva para proyectos específicos.',
-    features: ['Sistema a medida', 'Integraciones personalizadas', 'Dashboards y gestión', 'Escalabilidad', 'Soporte estratégico'],
-    highlighted: false,
+    title: 'Landing page',
+    service: 'Landing pages',
+    price: 'Desde $80.000 CLP',
+    description: 'Una página enfocada en una oferta o servicio.',
+    featured: true,
   },
+  {
+    title: 'Página web empresarial',
+    service: 'Desarrollo de páginas web',
+    price: 'Desde $120.000 CLP',
+    description: 'Una presencia digital profesional para tu empresa.',
+    featured: false,
+  },
+  {
+    title: 'Software personalizado',
+    service: 'Software a medida',
+    price: 'Según cotización',
+    description: 'Una propuesta a medida del alcance y las funcionalidades.',
+    featured: false,
+  },
+]
+
+export const portfolioCategories = [
+  { id: 'agency', label: 'Proyectos de la agencia' },
+  { id: 'founders', label: 'Experiencia de las fundadoras' },
+  { id: 'demos', label: 'Demos comerciales' },
 ]
 
 export const portfolio = [
   {
-    category: 'E-commerce',
-    title: 'StoreNova',
-    description: 'Marketplace elegante para productos premium con flujo de ventas y diseño orientado a conversión.',
+    title: 'PortalVehicular',
+    category: 'Marketplace',
+    description: 'Marketplace desarrollado con Next.js.',
+    technologies: ['Next.js'],
+    features: ['Plataforma marketplace', 'Desarrollo con Next.js'],
+    group: 'founders',
+    demoUrl: '',
+    demoLabel: '',
+    image: '',
   },
   {
-    category: 'Portafolio',
-    title: 'Marta Studio',
-    description: 'Sitio personal para fotógrafa con narración visual, galería premium y formularios integrados.',
+    title: 'Tu Fiesta Soñada',
+    category: 'Planificación de eventos',
+    description: 'Plataforma de planificación de eventos desarrollada con React y APIs.',
+    technologies: ['React', 'APIs'],
+    features: ['Planificación de eventos', 'Integración con APIs'],
+    group: 'founders',
+    demoUrl: 'https://tufiestasonada-test.devextreme.cl/VistasClientes/Bienvenida',
+    demoLabel: 'Entorno de prueba; puede solicitar acceso o iniciar sesión.',
+    image: '',
   },
   {
-    category: 'Sistema',
-    title: 'FlowOps',
-    description: 'Dashboard administrativo para gestión interna, reportes y automatización de procesos del equipo.',
+    title: 'MamáSoyYo',
+    category: 'Bienestar',
+    description: 'Plataforma de bienestar y talleres.',
+    technologies: [],
+    features: ['Bienestar', 'Talleres'],
+    group: 'founders',
+    demoUrl: '',
+    demoLabel: '',
+    image: '',
   },
   {
-    category: 'Negocio',
-    title: 'NorthBrand',
-    description: 'Landing experience para marca con estrategia digital, servicios y generación de leads.',
+    title: 'Data Science Portfolio',
+    category: 'Ciencia de datos',
+    description: 'Portafolio de ciencia de datos con React, Flask, Python y visualización de datos.',
+    technologies: ['React', 'Flask', 'Python'],
+    features: ['Ciencia de datos', 'Visualización de datos'],
+    group: 'founders',
+    demoUrl: 'https://datascience-portafolio.web.app/data-analytics',
+    demoLabel: '',
+    image: '',
+  },
+  {
+    title: 'FCnoLimit',
+    category: 'Aplicación',
+    description: 'Aplicación desarrollada con Ionic y Firebase.',
+    technologies: ['Ionic', 'Firebase'],
+    features: ['Aplicación', 'Integración con Firebase'],
+    group: 'founders',
+    demoUrl: '',
+    demoLabel: '',
+    image: '',
   },
 ]
 
-export const highlights = [
-  'Más de 5 años de experiencia',
-  'Soluciones personalizadas y escalables',
-  'Enfoque en conversión, diseño y performance',
+export const founders = [
+  {
+    name: 'Analia Rojas',
+    initials: 'AR',
+    role: 'Ingeniera en Informática',
+    position: 'Co-fundadora de A&D DIGTAL',
+    specialties: [],
+    bio: 'Ingeniera en Informática y co-fundadora de A&D DIGTAL.',
+    photo: '',
+    linkedin: '',
+    github: '',
+  },
+  {
+    name: 'Damaris',
+    initials: 'D',
+    role: 'Analista Programador Computacional',
+    position: 'Co-fundadora de A&D DIGTAL',
+    specialties: [],
+    bio: 'Analista Programador Computacional y co-fundadora de A&D DIGTAL.',
+    photo: '',
+    linkedin: '',
+    github: '',
+  },
 ]
 
-export const contactLinks = [
-  { label: 'Instagram', href: 'https://instagram.com', icon: 'IG' },
-  { label: 'LinkedIn', href: 'https://linkedin.com', icon: 'in' },
-  { label: 'GitHub', href: 'https://github.com', icon: 'GH' },
-  { label: 'WhatsApp', href: 'https://wa.me/5491123456789', icon: 'WA' },
+export const workflow = [
+  { number: '01', title: 'Conversamos', description: 'Entendemos tu negocio, tu idea y qué necesitas resolver.' },
+  { number: '02', title: 'Definimos el alcance', description: 'Acordamos funcionalidades, prioridades, tiempos y presupuesto.' },
+  { number: '03', title: 'Diseñamos y desarrollamos', description: 'Construimos una solución personalizada y te mantenemos al tanto del avance.' },
+  { number: '04', title: 'Revisamos', description: 'Probamos la solución y revisamos los ajustes incluidos en el alcance.' },
+  { number: '05', title: 'Publicamos', description: 'Preparamos la entrega y puesta en marcha según lo acordado.' },
 ]
 
-export const whatsappNumber = '5491123456789'
+export const faqs = [
+  {
+    question: '¿Cómo se define el precio final?',
+    answer: 'Los valores publicados son iniciales. La cotización final depende del alcance, las funcionalidades, el contenido y las integraciones requeridas.',
+  },
+  {
+    question: '¿El dominio y el hosting están incluidos?',
+    answer: 'No. El dominio, el hosting y los servicios externos se cotizan por separado según el proveedor y las necesidades del proyecto.',
+  },
+  {
+    question: '¿Trabajan solo con clientes de Valparaíso?',
+    answer: 'Estamos en Valparaíso, Chile, y podemos trabajar de forma remota con clientes de otras regiones.',
+  },
+  {
+    question: '¿Puedo solicitar cambios durante el desarrollo?',
+    answer: 'Sí. Revisamos avances y comentarios según las etapas y el alcance acordados para el proyecto.',
+  },
+  {
+    question: '¿Cómo solicito una cotización?',
+    answer: 'Completa el formulario con tu idea. Se preparará un mensaje para WhatsApp y podrás revisarlo antes de enviarlo.',
+  },
+]
 
 export const quoteServices = [
-  'Páginas web profesionales',
-  'Portafolio personal',
-  'Tienda online',
-  'Sistema personalizado',
-  'Desarrollo de software',
-  'Otro',
+  ...services.map(({ title }) => title),
+  'Otro / necesito orientación',
 ]
 
-export const stats = [
-  { value: '120+', label: 'Proyectos entregados' },
-  { value: '97%', label: 'Satisfacción de clientes' },
-  { value: '24/7', label: 'Atención y soporte' },
+export const budgetOptions = [
+  'Menos de $60.000 CLP',
+  '$60.000 – $120.000 CLP',
+  '$120.000 – $300.000 CLP',
+  '$300.000 – $600.000 CLP',
+  'Más de $600.000 CLP',
+  'Aún no lo sé',
 ]
+
+export const createWhatsAppUrl = (message) => {
+  const recipient = brand.whatsappNumber.replace(/\D/g, '')
+  const baseUrl = recipient ? `https://wa.me/${recipient}` : 'https://wa.me/'
+  return `${baseUrl}?text=${encodeURIComponent(message)}`
+}
