@@ -2012,6 +2012,9 @@
   .main-nav-open {
     display: flex;
     flex-direction: column;
+    max-height: calc(100dvh - 70px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .main-nav > a:not(.action-link) {
@@ -2272,6 +2275,8 @@
 
   .hero-actions .action-link {
     width: 100%;
+    flex: 0 0 auto;
+    min-height: 48px;
   }
 
   .trust-row {
@@ -2511,3 +2516,26 @@
 .email-composer .form-field select option { color: #253249; background: #fff; }
 .email-composer .form-privacy { margin: 0; color: #526077; font-size: 12px; line-height: 1.5; }
 .email-composer :is(input, textarea, select, button):focus-visible { outline: 2px solid #167882; outline-offset: 2px; }
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  .form-field input,
+  .form-field select,
+  .form-field textarea,
+  .email-composer-row input,
+  .email-composer-message textarea {
+    font-size: 16px;
+  }
+
+  .form-field { font-size: 12px; }
+  .form-field input, .form-field select { min-height: 46px; }
+  .submit-button { min-height: 48px; font-size: 13px; }
+  .project-demo, .similar-link, .founder-link, .footer-links a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+  }
+  .project-filter { min-height: 44px; font-size: 12px; }
+  .tag-list span { font-size: 10px; }
+  .site-footer { padding-bottom: 80px; }
+}

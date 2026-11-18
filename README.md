@@ -16,7 +16,22 @@ npm run build
 npm run lint
 ```
 
-## Publicar en GitHub Pages
+## Despliegue automático en Netlify
+
+El archivo [`netlify.toml`](./netlify.toml) configura Node.js 22, valida el código y las pruebas antes de compilar, publica `dist` y permite abrir directamente rutas de React. También incluye los identificadores públicos de EmailJS para que el correo esté habilitado al desplegar.
+
+Vinculación inicial (una sola vez):
+
+1. En [Netlify](https://app.netlify.com/start), elige importar un proyecto existente desde **GitHub**.
+2. Selecciona **analiarojas2929/pagina-web** y la rama **main**.
+3. Netlify leerá el comando de compilación y la carpeta de publicación desde `netlify.toml`. Confirma la publicación.
+4. Agrega el dominio publicado a los orígenes permitidos de EmailJS.
+
+Si el sitio ya existe en Netlify, vincula ese mismo repositorio desde **Project configuration → Build & deploy → Continuous deployment**; no necesitas crear otro sitio.
+
+A partir de la vinculación, cada `git push` a `main` inicia automáticamente una compilación y un despliegue. Los cambios locales deben guardarse, confirmarse en Git y subirse a GitHub para publicarse. No hace falta cargar `dist` manualmente ni configurar un token de Netlify en GitHub Actions.
+
+## Publicar en GitHub Pages (alternativa)
 
 El despliegue se realiza automáticamente al subir cambios a la rama `main`.
 

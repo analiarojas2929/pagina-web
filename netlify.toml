@@ -1,0 +1,26 @@
+[build]
+  command = "npm run lint && node --test src/services/quoteEmail.test.mjs && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # EmailJS uses public identifiers in the browser, not private credentials.
+  VITE_EMAILJS_SERVICE_ID = "ayddigital"
+  VITE_EMAILJS_TEMPLATE_ID = "template_ohg5wqw"
+  VITE_EMAILJS_PUBLIC_KEY = "MGsxiCbhzRSpUKd0V"
+
+# Serve the React app when a visitor opens a client-side route directly.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
