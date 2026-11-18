@@ -1,5 +1,8 @@
 import analiaRojasPhoto from '../assets/analia-rojas.jpeg'
 import damarisTapiaPhoto from '../assets/damaris-tapia.jpeg'
+import portalVehicularImage from '../assets/portal-vehicular.png'
+import mamaSoyYoImage from '../assets/mama-soy-yo.png'
+import fitzoneImage from '../assets/fitzone.png'
 
 import {
   BarChart3,
@@ -16,7 +19,7 @@ export const brand = {
   name: 'A&D DIGITAL',
   slogan: 'Soluciones digitales que impulsan tus ideas',
   email: 'ayd.digital.vregion@gmail.com',
-  whatsappNumber: '56949275045',
+  whatsappNumber: '56984930469',
   location: 'Valparaíso, Chile',
 }
 
@@ -120,10 +123,23 @@ export const plans = [
 export const portfolioCategories = [
   { id: 'agency', label: 'Proyectos de la agencia' },
   { id: 'founders', label: 'Experiencia de las fundadoras' },
-  { id: 'demos', label: 'Demos comerciales' },
+  { id: 'demos', label: 'Demos y prototipos' },
 ]
 
 export const portfolio = [
+  {
+    title: 'FitZone Gym',
+    category: 'Web para gimnasio',
+    description: 'Sitio de gimnasio con planes, clases y horarios, más un portal de demostración con rutinas, calendario y seguimiento del progreso.',
+    technologies: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'PostgreSQL'],
+    features: ['Planes y clases', 'Horarios de entrenamiento', 'Portal de usuario'],
+    group: 'founders',
+    isDemo: true,
+    repositoryUrl: 'https://github.com/analiarojas2929/gimnasio',
+    demoUrl: 'https://gimnasiofitzone.netlify.app/',
+    demoLabel: 'El acceso y registro del portal son de demostración.',
+    image: fitzoneImage,
+  },
   {
     title: 'PortalVehicular',
     category: 'Marketplace',
@@ -133,18 +149,7 @@ export const portfolio = [
     group: 'founders',
     demoUrl: 'https://portal-vehicular.azurewebsites.net/',
     demoLabel: '',
-    image: '',
-  },
-  {
-    title: 'Tu Fiesta Soñada',
-    category: 'Planificación de eventos',
-    description: 'Plataforma de planificación de eventos desarrollada con React y APIs.',
-    technologies: ['React', 'APIs'],
-    features: ['Planificación de eventos', 'Integración con APIs'],
-    group: 'founders',
-    demoUrl: 'https://tufiestasonada-test.devextreme.cl/VistasClientes/Bienvenida',
-    demoLabel: 'Entorno de prueba; puede solicitar acceso o iniciar sesión.',
-    image: '',
+    image: portalVehicularImage,
   },
   {
     title: 'MamáSoyYo',
@@ -153,30 +158,47 @@ export const portfolio = [
     technologies: [],
     features: ['Bienestar', 'Talleres'],
     group: 'founders',
-    demoUrl: '',
+    demoUrl: 'https://mamasoyyo.web.app/',
     demoLabel: '',
+    image: mamaSoyYoImage,
+  },
+  {
+    title: 'BarberStyle',
+    category: 'Web para barbería',
+    description: 'Prototipo de sitio para barbería con catálogo de servicios, galería y un flujo de reserva en cuatro pasos.',
+    technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
+    features: ['Selección de servicio y barbero', 'Fecha y hora', 'Diseño adaptable'],
+    group: 'founders',
+    isDemo: true,
+    repositoryUrl: 'https://github.com/analiarojas2929/barberia-app',
+    demoUrl: '',
+    demoLabel: 'Prototipo de interfaz; las reservas no están conectadas a un servidor.',
     image: '',
   },
   {
-    title: 'Data Science Portfolio',
-    category: 'Ciencia de datos',
-    description: 'Portafolio de ciencia de datos con React, Flask, Python y visualización de datos.',
-    technologies: ['React', 'Flask', 'Python'],
-    features: ['Ciencia de datos', 'Visualización de datos'],
+    title: 'Sistema de Reservas Online',
+    category: 'Reservas y atención al cliente',
+    description: 'Demo de reserva con calendario interactivo, selección de horario y un resumen de confirmación.',
+    technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
+    features: ['Calendario interactivo', 'Validación del formulario', 'Resumen de reserva'],
     group: 'founders',
-    demoUrl: 'https://datascience-portafolio.web.app/data-analytics',
-    demoLabel: '',
+    isDemo: true,
+    repositoryUrl: 'https://github.com/analiarojas2929/sistema-reservas-online',
+    demoUrl: '',
+    demoLabel: 'Demo de interfaz; las reservas no se guardan en una base de datos.',
     image: '',
   },
   {
-    title: 'FCnoLimit',
-    category: 'Aplicación',
-    description: 'Aplicación desarrollada con Ionic y Firebase.',
-    technologies: ['Ionic', 'Firebase'],
-    features: ['Aplicación', 'Integración con Firebase'],
+    title: 'NutriBalance',
+    category: 'Aplicación móvil',
+    description: 'MVP de seguimiento nutricional con diario de comidas, registro de agua y gráficas de peso. Guarda la información localmente.',
+    technologies: ['React Native', 'Expo', 'TypeScript', 'Firebase'],
+    features: ['Diario de comidas', 'Seguimiento de hábitos', 'Almacenamiento local'],
     group: 'founders',
+    isDemo: true,
+    repositoryUrl: 'https://github.com/analiarojas2929/NutriBalance',
     demoUrl: '',
-    demoLabel: '',
+    demoLabel: 'MVP en desarrollo; la sincronización automática en la nube aún no está activada.',
     image: '',
   },
 ]
@@ -272,5 +294,3 @@ export const createWhatsAppUrl = (message) => {
   return `${baseUrl}?text=${encodeURIComponent(message)}`
 }
 
-export const createGmailComposeUrl = (subject, message = '') =>
-  `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(brand.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`

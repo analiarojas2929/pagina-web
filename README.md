@@ -42,4 +42,30 @@ Las imágenes de proyectos y perfiles usan rutas locales cuando estén disponibl
 
 ## Cotizaciones
 
-El formulario valida los campos y genera un enlace de WhatsApp con los datos ingresados. No existe un backend y el mensaje no se envía automáticamente: la persona debe revisarlo y enviarlo desde WhatsApp. El número de destino se configura en `brand.whatsappNumber`.
+El formulario permite preparar una solicitud por WhatsApp o redactar y enviar un correo desde una ventana del sitio. El número de WhatsApp se configura en `brand.whatsappNumber`.
+
+### Activar el envío directo de correo
+
+El correo usa [EmailJS](https://www.emailjs.com/docs/), compatible con el alojamiento estático en GitHub Pages. No abre Gmail ni otra aplicación. Sin configuración, el botón de envío permanece deshabilitado y WhatsApp sigue disponible.
+
+1. Crea una cuenta en EmailJS y conecta la cuenta autorizada para enviar en **Email Services**.
+2. Crea una plantilla con estos campos:
+   - **To Email:** `ayd.digital.vregion@gmail.com` (fijo; no usar una variable del visitante).
+   - **From Email:** la cuenta conectada, usando el remitente predeterminado del servicio.
+   - **From Name:** `{{from_name}} · Solicitud web`.
+   - **Reply-To:** `{{reply_to}}`.
+   - **Subject:** `{{subject}}`.
+   - **Content:** copia el contenido de [`docs/quote-email-template.html`](./docs/quote-email-template.html) en el editor HTML.
+3. Copia `.env.example` a `.env.local` y completa el Service ID, Template ID y Public Key. Reinicia `npm run dev`.
+4. Para GitHub Pages, agrega esos mismos tres valores como variables del repositorio en **Settings → Secrets and variables → Actions → Variables** y vuelve a desplegar.
+5. En EmailJS, limita los dominios permitidos a los de tu sitio y al origen local que uses para desarrollo.
+
+Estas tres variables son identificadores públicos usados por el navegador. No agregues contraseñas, claves privadas ni tokens de Gmail a variables `VITE_`.
+
+El campo editable **De** identifica al solicitante y se usa como **Reply-To**; no autoriza el envío desde una dirección arbitraria. El remitente real siempre es la cuenta conectada a EmailJS. Si cambias `brand.email`, actualiza también el destinatario fijo de la plantilla.
+
+Comprobación de la integración sin enviar correos reales:
+
+```bash
+node --test src/services/quoteEmail.test.mjs
+```

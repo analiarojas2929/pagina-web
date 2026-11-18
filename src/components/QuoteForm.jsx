@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { ArrowUpRight, Mail, Send, Sparkles } from 'lucide-react'
-import { brand, budgetOptions, createGmailComposeUrl, createWhatsAppUrl, quoteServices } from '../data/siteData'
+import { useRef, useState } from 'react'
+import { ArrowUpRight, Mail, Send, Sparkles, X } from 'lucide-react'
+import { brand, budgetOptions, createWhatsAppUrl, quoteServices } from '../data/siteData'
+import { isQuoteEmailConfigured, sendQuoteEmail } from '../services/quoteEmail'
 
 const initialState = (service) => ({
   name: '',
@@ -15,6 +16,12 @@ const initialState = (service) => ({
 function QuoteForm({ initialService }) {
   const [formData, setFormData] = useState(() => initialState(initialService))
   const [statusMessage, setStatusMessage] = useState('')
+  const composerRef = useRef(null)
+  const [draft, setDraft] = useState({ from: '', subject: '', message: '' })
+  const [emailStatus, setEmailStatus] = useState({ type: '', message: '' })
+  const [isSending, setIsSending] = useState(false)
+  const sendingRef = useRef(false)
+  const emailConfigured = isQuoteEmailConfigured()
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -45,28 +52,25 @@ function QuoteForm({ initialService }) {
     formData.name.trim(),
   ].join('\r\n')
 
+  const emailSubject = `Cotización: ${formData.service || 'nuevo proyecto'}`
+
   const buildEmailMessage = () => [
-    `Hola equipo ${brand.name}:`,
+    `Hola, equipo de ${brand.name}:`,
     '',
-    'Quisiera solicitar una cotización para mi proyecto.',
+    `Mi nombre es ${formData.name.trim()}${formData.company.trim() ? `, de ${formData.company.trim()}` : ''}. Me gustaría cotizar el siguiente proyecto:`,
     '',
-    'DATOS DE CONTACTO',
-    `Nombre: ${formData.name.trim()}`,
-    `Empresa: ${formData.company.trim() || 'No indicada'}`,
-    `Correo de contacto: ${formData.email.trim()}`,
-    `WhatsApp: ${formData.whatsapp.trim()}`,
-    '',
-    'ALCANCE SOLICITADO',
     `Servicio: ${formData.service}`,
     `Presupuesto estimado: ${formData.budget}`,
     '',
-    'DESCRIPCIÓN DEL PROYECTO',
     formData.description.trim(),
     '',
-    'Gracias. Quedo atenta a sus comentarios.',
+    'Pueden contactarme a través de:',
+    `Correo: ${formData.email.trim()}`,
+    `WhatsApp: ${formData.whatsapp.trim()}`,
     '',
+    'Gracias por su tiempo. Quedo pendiente de su respuesta.',
     formData.name.trim(),
-  ].join('\r\n')
+  ].join('\n')
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -83,20 +87,46 @@ function QuoteForm({ initialService }) {
     setStatusMessage('WhatsApp se abrió con tu mensaje preparado. Revísalo y pulsa “Enviar” en WhatsApp para completar la solicitud.')
   }
 
-  const handleEmailClick = (event) => {
+  const openComposer = (event) => {
     if (!event.currentTarget.form.reportValidity()) return
+    setDraft({ from: formData.email.trim(), subject: emailSubject, message: buildEmailMessage() })
+    setEmailStatus({ type: '', message: '' })
+    composerRef.current.showModal()
+  }
 
-    const subject = `Solicitud de cotización | ${formData.name.trim()} | ${brand.name}`
-    const gmailUrl = createGmailComposeUrl(subject, buildEmailMessage())
-    const gmailWindow = window.open(gmailUrl, '_blank')
+  const handleDraftChange = (event) => {
+    const { name, value } = event.target
+    setEmailStatus({ type: '', message: '' })
+    setDraft((previous) => ({ ...previous, [name]: value }))
+  }
 
-    if (!gmailWindow) {
-      window.location.assign(gmailUrl)
-    } else {
-      gmailWindow.opener = null
+  const handleEmailSend = async (event) => {
+    event.preventDefault()
+    if (sendingRef.current || emailStatus.type === 'success') return
+    sendingRef.current = true
+    setIsSending(true)
+    setEmailStatus({ type: '', message: '' })
+    try {
+      await sendQuoteEmail({
+        name: formData.name.trim(),
+        replyTo: draft.from.trim(),
+        subject: draft.subject.trim(),
+        message: draft.message.trim(),
+      })
+      const confirmation = `Tu solicitud fue enviada a ${brand.email}. Responderemos a ${draft.from.trim()}.`
+      setEmailStatus({ type: 'success', message: confirmation })
+      setStatusMessage(confirmation)
+    } catch (error) {
+      const message = error.name === 'TimeoutError'
+        ? 'El servicio tardó en responder. No pudimos confirmar el envío; espera antes de volver a intentar.'
+        : error instanceof TypeError
+          ? 'No pudimos confirmar el envío. Revisa tu conexión y espera antes de volver a intentar.'
+          : error.message
+      setEmailStatus({ type: 'error', message })
+    } finally {
+      sendingRef.current = false
+      setIsSending(false)
     }
-
-    setStatusMessage(`Destinatario: ${brand.email}. Gmail enviará desde la cuenta que tengas activa; revisa el campo “De” y pulsa “Enviar”.`)
   }
 
   return (
@@ -168,11 +198,11 @@ function QuoteForm({ initialService }) {
         <button className="submit-button" type="submit">
           Preparar mensaje en WhatsApp <Send size={17} aria-hidden="true" />
         </button>
-        <button className="submit-button submit-button-email" type="button" onClick={handleEmailClick}>
-          Preparar correo <Mail size={17} aria-hidden="true" />
+        <button className="submit-button submit-button-email" type="button" onClick={openComposer}>
+          Redactar correo <Mail size={17} aria-hidden="true" />
         </button>
         <p className="form-privacy">
-          Elige WhatsApp o correo. Gmail abrirá la cotización dirigida a {brand.email}; el remitente será tu cuenta activa de Google. Revisa y pulsa “Enviar”.
+          La solicitud se dirige a {brand.email}. Revisa el mensaje antes de enviarlo por WhatsApp o desde esta página.
         </p>
         {statusMessage && (
           <p className="form-status" role="status">
@@ -180,6 +210,43 @@ function QuoteForm({ initialService }) {
           </p>
         )}
       </form>
+      <dialog ref={composerRef} className="email-composer" aria-labelledby="email-composer-title" onCancel={(event) => { if (sendingRef.current) event.preventDefault() }}>
+        <header className="email-composer-header">
+          <h3 id="email-composer-title"><Mail size={18} aria-hidden="true" /> Nuevo correo</h3>
+          <button type="button" className="email-composer-close" aria-label="Cerrar redacción" disabled={isSending} onClick={() => composerRef.current.close()}>
+            <X size={20} aria-hidden="true" />
+          </button>
+        </header>
+        <form className="email-composer-form" onSubmit={handleEmailSend} aria-busy={isSending}>
+          <div className="email-composer-body">
+          <fieldset className="email-composer-fields" disabled={isSending || emailStatus.type === 'success'}>
+          <label className="email-composer-row">
+            <span>De</span>
+            <input autoFocus type="email" name="from" value={draft.from} onChange={handleDraftChange} autoComplete="email" placeholder="tu@empresa.cl" aria-describedby="email-sender-note" maxLength={254} required />
+          </label>
+          <label className="email-composer-row">
+            <span>Para</span>
+            <input type="email" value={brand.email} readOnly />
+          </label>
+          <label className="email-composer-row">
+            <span>Asunto</span>
+            <input name="subject" value={draft.subject} onChange={handleDraftChange} maxLength={200} required />
+          </label>
+          <label className="email-composer-message">
+            <textarea aria-label="Mensaje" name="message" value={draft.message} onChange={handleDraftChange} rows={10} maxLength={10000} required />
+          </label>
+          </fieldset>
+          <p id="email-sender-note" className="form-privacy">“De” es tu correo de contacto: ahí responderemos. La solicitud se envía mediante el servicio de correo del sitio, sin iniciar sesión en tu cuenta.</p>
+          {!emailConfigured && <p className="email-composer-feedback" role="status">El envío directo aún no está habilitado. Mientras tanto, puedes solicitar tu cotización por WhatsApp.</p>}
+          </div>
+          <footer className="email-composer-footer">
+          <button className="submit-button submit-button-email" type="submit" disabled={!emailConfigured || isSending || emailStatus.type === 'success'}>
+            {isSending ? 'Enviando…' : emailStatus.type === 'success' ? 'Correo enviado' : 'Enviar correo'} <Send size={17} aria-hidden="true" />
+          </button>
+          {emailStatus.message && <p className="email-composer-feedback" role={emailStatus.type === 'error' ? 'alert' : 'status'}>{emailStatus.message}</p>}
+          </footer>
+        </form>
+      </dialog>
     </div>
   )
 }

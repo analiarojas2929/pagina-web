@@ -18,10 +18,10 @@ import {
 } from 'lucide-react'
 import BrandLogo from './components/BrandLogo'
 import QuoteForm from './components/QuoteForm'
+import ProjectArtwork from './components/ProjectArtwork'
 import SectionTitle from './components/SectionTitle'
 import {
   brand,
-  createGmailComposeUrl,
   createWhatsAppUrl,
   faqs,
   founders,
@@ -64,49 +64,13 @@ function SectionCta({ text = '¿Tienes un proyecto en mente?' }) {
   )
 }
 
-function ProjectArtwork({ project, index }) {
-  if (project.image) {
-    return (
-      <div className={`project-artwork project-artwork-${index + 1}`}>
-        <img src={project.image} alt={`Vista previa de ${project.title}`} loading="lazy" />
-      </div>
-    )
-  }
-
-  return (
-    <div className={`project-artwork project-artwork-${index + 1}`} aria-hidden="true">
-      <div className="artwork-window">
-        <div className="artwork-toolbar">
-          <span />
-          <span />
-          <span />
-          <small>{project.category}</small>
-        </div>
-        <div className="artwork-content">
-          <div className="artwork-sidebar">
-            <i />
-            <i />
-            <i />
-            <i />
-          </div>
-          <div className="artwork-main">
-            <span className="artwork-overline">A&amp;D DIGITAL · EXPERIENCIA</span>
-            <strong>{project.title}</strong>
-            <div className="artwork-lines"><i /><i /><i /></div>
-            <div className="artwork-blocks"><i /><i /><i /></div>
-          </div>
-        </div>
-      </div>
-      <span className="artwork-label">Previsualización gráfica · no es una captura</span>
-    </div>
-  )
-}
-
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [selectedService, setSelectedService] = useState('')
   const [activeProjectCategory, setActiveProjectCategory] = useState('founders')
-  const visiblePortfolio = portfolio.filter((project) => project.group === activeProjectCategory)
+  const visiblePortfolio = portfolio.filter((project) =>
+    project.group === activeProjectCategory || (activeProjectCategory === 'demos' && project.isDemo),
+  )
   const projectEmptyMessage = activeProjectCategory === 'agency'
     ? 'Aún no hemos añadido proyectos comerciales de A&D DIGITAL. Las referencias disponibles se muestran como experiencia de las fundadoras.'
     : 'Las demos comerciales se publicarán aquí cuando estén disponibles.'
@@ -295,7 +259,7 @@ function App() {
             <SectionTitle
               eyebrow="Proyectos"
               title="Experiencia y demos de las fundadoras"
-              description="Referencias de experiencia técnica de las fundadoras, no proyectos comerciales realizados por A&amp;D DIGITAL. Las demos solo se enlazan cuando hay una dirección disponible."
+              description="Una selección de proyectos, demos y prototipos de las fundadoras. Explora sus tecnologías, funcionalidades y código disponible en GitHub."
             />
             <div className="project-filters" role="group" aria-label="Filtrar proyectos">
               {portfolioCategories.map((category) => (
@@ -326,7 +290,7 @@ function App() {
                   variants={reveal}
                   transition={{ duration: 0.45, delay: (index % 2) * 0.08 }}
                 >
-                  <ProjectArtwork project={project} index={index} />
+                  <ProjectArtwork project={project} />
                   <div className="project-content">
                     <div className="project-heading">
                       <div><span className="project-category">{project.category}</span><h3>{project.title}</h3></div>
@@ -350,7 +314,12 @@ function App() {
                           Ver proyecto <ExternalLink size={15} aria-hidden="true" />
                         </a>
                       )}
-                      {!project.demoUrl && <span className="project-unavailable">Demo no disponible</span>}
+                      {project.repositoryUrl && (
+                        <a className="project-demo" href={project.repositoryUrl} target="_blank" rel="noreferrer" aria-label={`Ver código de ${project.title} en GitHub`}>
+                          Ver código en GitHub <ExternalLink size={15} aria-hidden="true" />
+                        </a>
+                      )}
+                      {!project.demoUrl && !project.repositoryUrl && <span className="project-unavailable">Demo no disponible</span>}
                       <a
                         className="similar-link"
                         href={createWhatsAppUrl(`Hola, nos interesa conversar con A&D DIGITAL sobre un proyecto similar a ${project.title}.`)}
@@ -507,11 +476,9 @@ function App() {
               </a>
               <a
                 className="contact-button contact-button-email"
-                href={createGmailComposeUrl('Contacto con A&D DIGITAL')}
-                target="_blank"
-                rel="noreferrer"
+                href="#cotizacion"
               >
-                <Mail size={18} /> Escríbenos por Gmail
+                <Mail size={18} /> Preparar correo de contacto
               </a>
               <div className="contact-socials" aria-label="LinkedIn de las fundadoras">
                 {founders.filter((founder) => founder.linkedin).map((founder) => (
