@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { Fragment, useRef, useState } from 'react'
+import { motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import {
   ArrowDown,
   ArrowRight,
@@ -7,7 +7,6 @@ import {
   BadgeCheck,
   Check,
   ChevronDown,
-  Code2,
   ExternalLink,
   Mail,
   Menu,
@@ -19,6 +18,7 @@ import {
 import BrandLogo from './components/BrandLogo'
 import QuoteForm from './components/QuoteForm'
 import ProjectArtwork from './components/ProjectArtwork'
+import HeroVisual from './components/HeroVisual'
 import SectionTitle from './components/SectionTitle'
 import {
   brand,
@@ -40,6 +40,11 @@ const reveal = {
 }
 
 const currentYear = new Date().getFullYear()
+const heroWords = ['Transformamos', 'tus', 'ideas', 'en', 'soluciones', 'digitales']
+const wordReveal = {
+  hidden: { opacity: 0, y: 30, rotateX: -30 },
+  visible: { opacity: 1, y: 0, rotateX: 0 },
+}
 
 function ActionLink({ children, href = '#cotizacion', secondary = false, ...props }) {
   return (
@@ -66,6 +71,8 @@ function SectionCta({ text = '¿Tienes un proyecto en mente?' }) {
 
 function App() {
   const reduceMotion = useReducedMotion()
+  const heroRef = useRef(null)
+  const heroInView = useInView(heroRef, { amount: 0.08 })
   const { scrollYProgress } = useScroll()
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 160, damping: 30 })
   const [menuOpen, setMenuOpen] = useState(false)
@@ -116,9 +123,12 @@ function App() {
       </header>
 
       <main>
-        <section id="inicio" className="hero-section">
+        <section id="inicio" className="hero-section" ref={heroRef} data-motion-active={heroInView && !reduceMotion}>
           <div className="hero-grid-pattern" aria-hidden="true" />
           <div className="hero-ambient" aria-hidden="true"><span /><span /></div>
+          <div className="hero-particles" aria-hidden="true">
+            {Array.from({ length: 8 }, (_, index) => <i key={index} style={{ '--particle-x': `${8 + index * 12}%`, '--particle-delay': `${index * -1.4}s`, '--particle-duration': `${10 + index % 3 * 3}s` }} />)}
+          </div>
           <div className="container hero-layout">
             <motion.div
               className="hero-copy"
@@ -127,7 +137,17 @@ function App() {
               variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } } }}
             >
               <motion.p variants={reveal} className="eyebrow"><span className="eyebrow-dot" /> {brand.slogan.toUpperCase()}</motion.p>
-              <motion.h1 variants={reveal}>Transformamos tus ideas en <span>soluciones digitales</span></motion.h1>
+              <motion.h1
+                aria-label="Transformamos tus ideas en soluciones digitales"
+                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+              >
+                {heroWords.map((word, index) => (
+                  <Fragment key={word}>
+                    <motion.span variants={wordReveal} className={`hero-title-word${index > 3 ? ' hero-title-accent' : ''}`} aria-hidden="true">{word}</motion.span>
+                    {index < heroWords.length - 1 ? ' ' : ''}
+                  </Fragment>
+                ))}
+              </motion.h1>
               <motion.p variants={reveal} className="hero-description">
                 En A&amp;D DIGITAL desarrollamos páginas web, software y experiencias digitales que ayudan a emprendedores y empresas a crecer.
               </motion.p>
@@ -149,30 +169,7 @@ function App() {
               </motion.div>
             </motion.div>
 
-            <motion.div
-              className="hero-visual"
-              initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              aria-hidden="true"
-            >
-              <div className="hero-card">
-                <div className="hero-card-top">
-                  <div className="hero-card-brand"><span>A&amp;D</span> DIGITAL STUDIO</div>
-                  <div className="hero-card-menu"><i /><i /><i /></div>
-                </div>
-                <div className="hero-card-body">
-                  <span className="hero-card-kicker">IDEA · ESTRATEGIA · DESARROLLO</span>
-                  <div className="hero-card-heading">Tu próximo<br /><b>proyecto digital.</b></div>
-                  <div className="hero-card-subline" />
-                  <div className="hero-card-button">Hablemos <ArrowUpRight size={13} /></div>
-                </div>
-                <div className="hero-card-footer">
-                  <span>A&amp;D DIGITAL</span><span>TECNOLOGÍA A MEDIDA</span>
-                </div>
-              </div>
-              <div className="hero-float-card"><span><Code2 size={16} /></span> Tecnología para impulsar tus ideas</div>
-            </motion.div>
+            <HeroVisual />
           </div>
           <div className="hero-bottom-line" />
         </section>
