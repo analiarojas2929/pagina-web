@@ -18,6 +18,21 @@ npm run lint
 
 ## Publicar en Cloudflare Pages con ayd-digital.cl
 
+### Estado de la publicación
+
+La versión actual está publicada en **https://ayd-digital.pages.dev/**, en el proyecto `ayd-digital`, mediante carga directa con Wrangler. La integración de compilación desde GitHub no quedó vinculada porque Cloudflare devolvió el error `8000011`; las actualizaciones todavía no son automáticas.
+
+Para actualizar el proyecto existente desde una computadora autorizada:
+
+```bash
+npm run build:production
+npx wrangler pages deploy dist --project-name ayd-digital --branch main
+```
+
+El dominio `ayd-digital.cl` requiere agregar su zona a Cloudflare, configurar en NIC Chile los nameservers asignados y asociarlo en **Custom domains** del proyecto. No se debe considerar activo hasta comprobar DNS y HTTPS.
+
+### Configuración de referencia para un proyecto con integración Git
+
 El sitio está preparado para Cloudflare Pages. El alojamiento gratuito requiere una cuenta de Cloudflare y vincular el repositorio una vez. El workflow de GitHub valida el proyecto; la publicación la realiza la integración de Cloudflare.
 
 1. En Cloudflare, entra a **Workers & Pages → Create application → Pages → Connect to Git**.
