@@ -1,6 +1,6 @@
-# A&D DIGTAL
+# A&D DIGITAL
 
-Sitio web comercial de A&D DIGTAL, agencia digital en Valparaíso, Chile. Presenta servicios, precios iniciales, experiencia de las fundadoras, metodología y un cotizador que prepara una solicitud para enviar por WhatsApp.
+Sitio web comercial de A&D DIGITAL, agencia digital en Valparaíso, Chile. Presenta servicios, precios iniciales, experiencia de las fundadoras, metodología y un cotizador que prepara una solicitud para enviar por WhatsApp.
 
 ## Desarrollo
 

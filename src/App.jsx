@@ -9,16 +9,19 @@ import {
   ChevronDown,
   Code2,
   ExternalLink,
+  Mail,
   Menu,
   MessageCircle,
   ShieldCheck,
   Sparkles,
   X,
 } from 'lucide-react'
+import BrandLogo from './components/BrandLogo'
 import QuoteForm from './components/QuoteForm'
 import SectionTitle from './components/SectionTitle'
 import {
   brand,
+  createGmailComposeUrl,
   createWhatsAppUrl,
   faqs,
   founders,
@@ -87,7 +90,7 @@ function ProjectArtwork({ project, index }) {
             <i />
           </div>
           <div className="artwork-main">
-            <span className="artwork-overline">A&amp;D DIGTAL · EXPERIENCIA</span>
+            <span className="artwork-overline">A&amp;D DIGITAL · EXPERIENCIA</span>
             <strong>{project.title}</strong>
             <div className="artwork-lines"><i /><i /><i /></div>
             <div className="artwork-blocks"><i /><i /><i /></div>
@@ -105,7 +108,7 @@ function App() {
   const [activeProjectCategory, setActiveProjectCategory] = useState('founders')
   const visiblePortfolio = portfolio.filter((project) => project.group === activeProjectCategory)
   const projectEmptyMessage = activeProjectCategory === 'agency'
-    ? 'Aún no hemos añadido proyectos comerciales de A&D DIGTAL. Las referencias disponibles se muestran como experiencia de las fundadoras.'
+    ? 'Aún no hemos añadido proyectos comerciales de A&D DIGITAL. Las referencias disponibles se muestran como experiencia de las fundadoras.'
     : 'Las demos comerciales se publicarán aquí cuando estén disponibles.'
 
   const selectService = (serviceTitle) => {
@@ -117,11 +120,7 @@ function App() {
       <header className="site-header">
         <div className="header-inner">
           <a href="#inicio" className="brand" aria-label={`${brand.name}, inicio`}>
-            <span className="brand-wordmark">A&amp;D <span>DIGTAL</span></span>
-            <span className="brand-copy">
-              <strong>{brand.slogan}</strong>
-              <small>Agencia digital · Chile</small>
-            </span>
+            <BrandLogo className="header-brand-logo" variant="dark" width={232} height={72} loading="eager" />
           </a>
 
           <nav id="mobile-menu" className={`main-nav ${menuOpen ? 'main-nav-open' : ''}`} aria-label="Navegación principal">
@@ -162,7 +161,7 @@ function App() {
               <p className="eyebrow"><span className="eyebrow-dot" /> {brand.slogan.toUpperCase()}</p>
               <h1>Transformamos tus ideas en <span>soluciones digitales</span></h1>
               <p className="hero-description">
-                En A&amp;D DIGTAL desarrollamos páginas web, software y experiencias digitales que ayudan a emprendedores y empresas a crecer.
+                En A&amp;D DIGITAL desarrollamos páginas web, software y experiencias digitales que ayudan a emprendedores y empresas a crecer.
               </p>
               <div className="hero-actions">
                 <ActionLink>
@@ -175,7 +174,7 @@ function App() {
                   Ver proyectos <ArrowDown size={16} aria-hidden="true" />
                 </ActionLink>
               </div>
-              <div className="trust-row" aria-label="Valores de A&D DIGTAL">
+              <div className="trust-row" aria-label="Valores de A&D DIGITAL">
                 <span><BadgeCheck size={17} /> Equipo de dos fundadoras</span>
                 <span><BadgeCheck size={17} /> Desarrollo personalizado</span>
                 <span><BadgeCheck size={17} /> Atención cercana</span>
@@ -201,7 +200,7 @@ function App() {
                   <div className="hero-card-button">Hablemos <ArrowUpRight size={13} /></div>
                 </div>
                 <div className="hero-card-footer">
-                  <span>A&amp;D DIGTAL</span><span>TECNOLOGÍA A MEDIDA</span>
+                  <span>A&amp;D DIGITAL</span><span>TECNOLOGÍA A MEDIDA</span>
                 </div>
               </div>
               <div className="hero-float-card"><span><Code2 size={16} /></span> Tecnología para impulsar tus ideas</div>
@@ -270,7 +269,7 @@ function App() {
             <div className="plans-grid">
               {plans.map((plan) => (
                 <article className={`plan-card ${plan.featured ? 'plan-card-featured' : ''}`} key={plan.title}>
-                  <p className="plan-kicker">A&amp;D DIGTAL</p>
+                  <p className="plan-kicker">A&amp;D DIGITAL</p>
                   <h3>{plan.title}</h3>
                   <p className="plan-price">{plan.price}</p>
                   <p className="plan-description">{plan.description}</p>
@@ -296,7 +295,7 @@ function App() {
             <SectionTitle
               eyebrow="Proyectos"
               title="Experiencia y demos de las fundadoras"
-              description="Referencias de experiencia técnica de las fundadoras, no proyectos comerciales realizados por A&amp;D DIGTAL. Las demos solo se enlazan cuando hay una dirección disponible."
+              description="Referencias de experiencia técnica de las fundadoras, no proyectos comerciales realizados por A&amp;D DIGITAL. Las demos solo se enlazan cuando hay una dirección disponible."
             />
             <div className="project-filters" role="group" aria-label="Filtrar proyectos">
               {portfolioCategories.map((category) => (
@@ -354,7 +353,7 @@ function App() {
                       {!project.demoUrl && <span className="project-unavailable">Demo no disponible</span>}
                       <a
                         className="similar-link"
-                        href={createWhatsAppUrl(`Hola, nos interesa conversar con A&D DIGTAL sobre un proyecto similar a ${project.title}.`)}
+                        href={createWhatsAppUrl(`Hola, nos interesa conversar con A&D DIGITAL sobre un proyecto similar a ${project.title}.`)}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -402,7 +401,7 @@ function App() {
           <div className="container">
             <SectionTitle
               eyebrow="Sobre nosotras"
-              title="Las profesionales detrás de A&amp;D DIGTAL"
+              title="Las profesionales detrás de A&amp;D DIGITAL"
               description="Somos dos socias fundadoras y profesionales del área tecnológica."
             />
             <div className="founders-grid">
@@ -445,7 +444,7 @@ function App() {
             </div>
             <div className="team-message">
               <span className="benefit-icon"><Sparkles size={18} /></span>
-              <p><strong>{brand.slogan}</strong><br />En A&amp;D DIGTAL somos dos profesionales del área tecnológica que unimos nuestros conocimientos y nuestra pasión por la innovación para transformar ideas en soluciones digitales. Nuestro propósito es ayudar a emprendedores, profesionales y empresas a fortalecer su presencia digital mediante el desarrollo de páginas web, software y herramientas tecnológicas adaptadas a sus necesidades.</p>
+              <p><strong>{brand.slogan}</strong><br />En A&amp;D DIGITAL somos dos profesionales del área tecnológica que unimos nuestros conocimientos y nuestra pasión por la innovación para transformar ideas en soluciones digitales. Nuestro propósito es ayudar a emprendedores, profesionales y empresas a fortalecer su presencia digital mediante el desarrollo de páginas web, software y herramientas tecnológicas adaptadas a sus necesidades.</p>
             </div>
             <SectionCta text="Conversemos sobre lo que podemos crear en equipo." />
           </div>
@@ -479,8 +478,7 @@ function App() {
               <p className="eyebrow"><span className="eyebrow-dot" /> COTIZACIÓN PERSONALIZADA</p>
               <h2>Cuéntanos qué quieren construir.</h2>
               <p>
-                Comparte los detalles de tu idea. Prepararemos un mensaje con la información para
-                que lo revises y lo envíes por WhatsApp.
+                Comparte los detalles de tu idea. Prepararemos un mensaje para que lo revises y lo envíes por WhatsApp o correo.
               </p>
               <div className="quote-assurance">
                 <span><ShieldCheck size={19} /></span>
@@ -501,12 +499,27 @@ function App() {
             <div className="contact-actions">
               <a
                 className="contact-button"
-                href={createWhatsAppUrl('Hola A&D DIGTAL, quisiera conversar sobre un proyecto.')}
+                href={createWhatsAppUrl('Hola A&D DIGITAL, quisiera conversar sobre un proyecto.')}
                 target="_blank"
                 rel="noreferrer"
               >
                 <MessageCircle size={18} /> Contactar por WhatsApp <ArrowUpRight size={16} />
               </a>
+              <a
+                className="contact-button contact-button-email"
+                href={createGmailComposeUrl('Contacto con A&D DIGITAL')}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Mail size={18} /> Escríbenos por Gmail
+              </a>
+              <div className="contact-socials" aria-label="LinkedIn de las fundadoras">
+                {founders.filter((founder) => founder.linkedin).map((founder) => (
+                  <a key={founder.name} href={founder.linkedin} target="_blank" rel="noreferrer">
+                    <ExternalLink size={15} aria-hidden="true" /> LinkedIn · {founder.name}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -514,9 +527,8 @@ function App() {
 
       <footer className="site-footer">
         <div className="container footer-inner">
-          <a href="#inicio" className="brand footer-brand">
-            <span className="brand-wordmark">A&amp;D <span>DIGTAL</span></span>
-            <span className="brand-copy"><strong>{brand.slogan}</strong><small>Agencia digital · Chile</small></span>
+          <a href="#inicio" className="brand footer-brand" aria-label={`${brand.name}, volver al inicio`}>
+            <BrandLogo variant="horizontal" width={220} height={68} />
           </a>
           <p>{brand.slogan} · {brand.location}</p>
           <div className="footer-links">
@@ -530,10 +542,10 @@ function App() {
       </footer>
       <a
         className="floating-whatsapp"
-        href={createWhatsAppUrl('Hola A&D DIGTAL, quisiera conversar sobre un proyecto.')}
+        href={createWhatsAppUrl('Hola A&D DIGITAL, quisiera conversar sobre un proyecto.')}
         target="_blank"
         rel="noreferrer"
-        aria-label="Contactar a A&D DIGTAL por WhatsApp"
+        aria-label="Contactar a A&D DIGITAL por WhatsApp"
       >
         <MessageCircle size={20} aria-hidden="true" />
         <span>Hablemos</span>

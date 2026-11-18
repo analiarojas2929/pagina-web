@@ -13,6 +13,11 @@
   font-optical-sizing: auto;
   font-weight: 400;
   scroll-behavior: smooth;
+  --brand-navy: #0B1636;
+  --brand-blue: #1265D8;
+  --brand-cyan: #13C8F4;
+  --brand-violet: #7138F5;
+  --brand-white: #FFFFFF;
   --page: #070b15;
   --surface: #0d1321;
   --surface-raised: #111a2b;

@@ -1,3 +1,6 @@
+import analiaRojasPhoto from '../assets/analia-rojas.jpeg'
+import damarisTapiaPhoto from '../assets/damaris-tapia.jpeg'
+
 import {
   BarChart3,
   BriefcaseBusiness,
@@ -10,8 +13,9 @@ import {
 } from 'lucide-react'
 
 export const brand = {
-  name: 'A&D DIGTAL',
+  name: 'A&D DIGITAL',
   slogan: 'Soluciones digitales que impulsan tus ideas',
+  email: 'ayd.digital.vregion@gmail.com',
   whatsappNumber: '56949275045',
   location: 'Valparaíso, Chile',
 }
@@ -127,7 +131,7 @@ export const portfolio = [
     technologies: ['Next.js'],
     features: ['Plataforma marketplace', 'Desarrollo con Next.js'],
     group: 'founders',
-    demoUrl: '',
+    demoUrl: 'https://portal-vehicular.azurewebsites.net/',
     demoLabel: '',
     image: '',
   },
@@ -182,23 +186,38 @@ export const founders = [
     name: 'Analia Rojas',
     initials: 'AR',
     role: 'Ingeniera en Informática',
-    position: 'Co-fundadora de A&D DIGTAL',
-    specialties: [],
-    bio: 'Ingeniera en Informática y co-fundadora de A&D DIGTAL.',
-    photo: '',
-    linkedin: '',
-    github: '',
+    position: 'Cofundadora de A&D DIGITAL',
+    specialties: [
+      'Desarrollo Front-End',
+      'Aplicaciones web',
+      'Gestión de proyectos TI',
+      'UX/UI',
+      'Integración de APIs',
+      'Cloud Computing',
+      'Data Science',
+    ],
+    bio: 'Profesional enfocada en el desarrollo de soluciones digitales, combinando conocimientos de programación, diseño de interfaces y gestión de proyectos tecnológicos para transformar necesidades de negocio en productos funcionales.',
+    photo: analiaRojasPhoto,
+    linkedin: 'https://www.linkedin.com/in/analia-rojas-araya-056349205/',
+    github: 'https://github.com/analiarojas2929',
   },
   {
-    name: 'Damaris',
+    name: 'Damaris Tapia',
     initials: 'D',
     role: 'Analista Programador Computacional',
-    position: 'Co-fundadora de A&D DIGTAL',
-    specialties: [],
-    bio: 'Analista Programador Computacional y co-fundadora de A&D DIGTAL.',
-    photo: '',
-    linkedin: '',
-    github: '',
+    position: 'Cofundadora de A&D DIGITAL',
+    specialties: [
+      'Desarrollo Back-End',
+      'Bases de datos',
+      'Diseño y modelado de datos',
+      'Lógica de negocio',
+      'Integración de sistemas',
+      'Desarrollo de software',
+    ],
+    bio: 'Profesional enfocada en el desarrollo Back-End y la gestión de bases de datos, con experiencia en la implementación de lógica de negocio, estructuración de información y desarrollo de sistemas tecnológicos. Su enfoque está orientado a construir soluciones funcionales, eficientes y adaptadas a las necesidades de cada proyecto.',
+    photo: damarisTapiaPhoto,
+    linkedin: 'https://www.linkedin.com/in/damaris-tapia-nu%C3%B1ez-07b427223/',
+    github: 'https://github.com/damaristapia777-crypto',
   },
 ]
 
@@ -252,3 +271,6 @@ export const createWhatsAppUrl = (message) => {
   const baseUrl = recipient ? `https://wa.me/${recipient}` : 'https://wa.me/'
   return `${baseUrl}?text=${encodeURIComponent(message)}`
 }
+
+export const createGmailComposeUrl = (subject, message = '') =>
+  `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(brand.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`

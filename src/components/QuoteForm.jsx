@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { ArrowUpRight, Send, Sparkles } from 'lucide-react'
-import { brand, budgetOptions, createWhatsAppUrl, quoteServices } from '../data/siteData'
+import { ArrowUpRight, Mail, Send, Sparkles } from 'lucide-react'
+import { brand, budgetOptions, createGmailComposeUrl, createWhatsAppUrl, quoteServices } from '../data/siteData'
 
 const initialState = (service) => ({
   name: '',
@@ -22,21 +22,56 @@ function QuoteForm({ initialService }) {
     setFormData((previous) => ({ ...previous, [name]: value }))
   }
 
+  const buildQuoteMessage = () => [
+    `Hola ${brand.name}:`,
+    '',
+    'Quisiera solicitar una cotización. Comparto los detalles de mi proyecto:',
+    '',
+    'DATOS DE CONTACTO',
+    `Nombre: ${formData.name.trim()}`,
+    `Empresa: ${formData.company.trim() || 'No indicada'}`,
+    `Correo: ${formData.email.trim()}`,
+    `WhatsApp: ${formData.whatsapp.trim()}`,
+    '',
+    'DETALLES DEL PROYECTO',
+    `Servicio requerido: ${formData.service}`,
+    `Presupuesto estimado: ${formData.budget}`,
+    '',
+    'Descripción:',
+    formData.description.trim(),
+    '',
+    'Quedo atenta a sus comentarios.',
+    '',
+    formData.name.trim(),
+  ].join('\r\n')
+
+  const buildEmailMessage = () => [
+    `Hola equipo ${brand.name}:`,
+    '',
+    'Quisiera solicitar una cotización para mi proyecto.',
+    '',
+    'DATOS DE CONTACTO',
+    `Nombre: ${formData.name.trim()}`,
+    `Empresa: ${formData.company.trim() || 'No indicada'}`,
+    `Correo de contacto: ${formData.email.trim()}`,
+    `WhatsApp: ${formData.whatsapp.trim()}`,
+    '',
+    'ALCANCE SOLICITADO',
+    `Servicio: ${formData.service}`,
+    `Presupuesto estimado: ${formData.budget}`,
+    '',
+    'DESCRIPCIÓN DEL PROYECTO',
+    formData.description.trim(),
+    '',
+    'Gracias. Quedo atenta a sus comentarios.',
+    '',
+    formData.name.trim(),
+  ].join('\r\n')
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    const message = [
-      `Hola ${brand.name}, quisiera solicitar una cotización.`,
-      '',
-      `Nombre: ${formData.name.trim()}`,
-      `Empresa: ${formData.company.trim() || 'No indicada'}`,
-      `Correo: ${formData.email.trim()}`,
-      `WhatsApp: ${formData.whatsapp.trim()}`,
-      `Servicio: ${formData.service}`,
-      `Presupuesto estimado: ${formData.budget}`,
-      `Descripción del proyecto: ${formData.description.trim()}`,
-    ].join('\n')
-    const whatsappUrl = createWhatsAppUrl(message)
+    const whatsappUrl = createWhatsAppUrl(buildQuoteMessage())
     const whatsappWindow = window.open(whatsappUrl, '_blank')
 
     if (!whatsappWindow) {
@@ -46,6 +81,22 @@ function QuoteForm({ initialService }) {
     }
 
     setStatusMessage('WhatsApp se abrió con tu mensaje preparado. Revísalo y pulsa “Enviar” en WhatsApp para completar la solicitud.')
+  }
+
+  const handleEmailClick = (event) => {
+    if (!event.currentTarget.form.reportValidity()) return
+
+    const subject = `Solicitud de cotización | ${formData.name.trim()} | ${brand.name}`
+    const gmailUrl = createGmailComposeUrl(subject, buildEmailMessage())
+    const gmailWindow = window.open(gmailUrl, '_blank')
+
+    if (!gmailWindow) {
+      window.location.assign(gmailUrl)
+    } else {
+      gmailWindow.opener = null
+    }
+
+    setStatusMessage(`Destinatario: ${brand.email}. Gmail enviará desde la cuenta que tengas activa; revisa el campo “De” y pulsa “Enviar”.`)
   }
 
   return (
@@ -117,8 +168,11 @@ function QuoteForm({ initialService }) {
         <button className="submit-button" type="submit">
           Preparar mensaje en WhatsApp <Send size={17} aria-hidden="true" />
         </button>
+        <button className="submit-button submit-button-email" type="button" onClick={handleEmailClick}>
+          Preparar correo <Mail size={17} aria-hidden="true" />
+        </button>
         <p className="form-privacy">
-          El formulario no envía datos automáticamente. WhatsApp se abrirá para que revises y envíes el mensaje.
+          Elige WhatsApp o correo. Gmail abrirá la cotización dirigida a {brand.email}; el remitente será tu cuenta activa de Google. Revisa y pulsa “Enviar”.
         </p>
         {statusMessage && (
           <p className="form-status" role="status">
