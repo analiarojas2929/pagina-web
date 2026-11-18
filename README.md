@@ -55,7 +55,10 @@ Documentacion: [integracion con Git](https://developers.cloudflare.com/pages/get
 Los datos visibles del sitio se centralizan en [`src/data/siteData.js`](./src/data/siteData.js):
 
 - `brand`: nombre, eslogan, ubicación y número de WhatsApp de la agencia.
-- `services` y `plans`: descripciones, beneficios y precios iniciales.
+- `services`: catálogo de servicios y beneficios.
+- `plans`: los tres planes web, sus valores iniciales en CLP, alcance, comparativa y desglose del trabajo. La suma de `breakdown` debe coincidir con `amount`.
+- `complementaryPlans`: menú digital y portafolio personal con un alcance acotado.
+- `planComparisonRows`: filas de la comparación de planes.
 - `portfolio` y `portfolioCategories`: referencias, tecnologías, demos, clasificación e imágenes.
 - `founders`: nombres, cargos, biografías, especialidades, fotografías y perfiles de LinkedIn.
 - `workflow` y `faqs`: metodología y preguntas frecuentes.

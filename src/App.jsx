@@ -19,16 +19,17 @@ import BrandLogo from './components/BrandLogo'
 import QuoteForm from './components/QuoteForm'
 import ProjectArtwork from './components/ProjectArtwork'
 import HeroVisual from './components/HeroVisual'
+import PricingSection from './components/PricingSection'
 import SectionTitle from './components/SectionTitle'
 import {
   brand,
   createWhatsAppUrl,
   faqs,
   founders,
+  formatCLP,
   navItems,
   portfolio,
   portfolioCategories,
-  plans,
   services,
   workflow,
 } from './data/siteData'
@@ -77,6 +78,7 @@ function App() {
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 160, damping: 30 })
   const [menuOpen, setMenuOpen] = useState(false)
   const [selectedService, setSelectedService] = useState('')
+  const [selectedPlan, setSelectedPlan] = useState('')
   const [activeProjectCategory, setActiveProjectCategory] = useState('founders')
   const visiblePortfolio = portfolio.filter((project) =>
     project.group === activeProjectCategory || (activeProjectCategory === 'demos' && project.isDemo),
@@ -87,6 +89,12 @@ function App() {
 
   const selectService = (serviceTitle) => {
     setSelectedService(serviceTitle)
+    setSelectedPlan('')
+  }
+
+  const selectPlan = (plan) => {
+    setSelectedService(plan.service)
+    setSelectedPlan(`${plan.title} · desde ${formatCLP(plan.amount)} CLP`)
   }
 
   return (
@@ -224,44 +232,7 @@ function App() {
           </div>
         </section>
 
-        <section id="planes" className="content-section pricing-section">
-          <div className="container">
-            <SectionTitle
-              eyebrow="Planes y precios"
-              title="Precios iniciales claros"
-              description="Valores de referencia editables. Cada proyecto se cotiza de acuerdo con su alcance y necesidades."
-            />
-            <div className="plans-grid">
-              {plans.map((plan, index) => (
-                <motion.article
-                  className={`plan-card ${plan.featured ? 'plan-card-featured' : ''}`}
-                  key={plan.title}
-                  initial={reduceMotion ? false : 'hidden'}
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.12 }}
-                  variants={reveal}
-                  transition={{ duration: 0.45, delay: index * 0.06 }}
-                >
-                  <p className="plan-kicker">A&amp;D DIGITAL</p>
-                  <h3>{plan.title}</h3>
-                  <p className="plan-price">{plan.price}</p>
-                  <p className="plan-description">{plan.description}</p>
-                  <a
-                    className="plan-link"
-                    href="#cotizacion"
-                    onClick={() => selectService(plan.service)}
-                  >
-                    Solicitar cotización <ArrowRight size={15} aria-hidden="true" />
-                  </a>
-                </motion.article>
-              ))}
-            </div>
-            <p className="pricing-note">
-              Los precios publicados son iniciales y dependen del alcance del proyecto. Dominio, hosting y servicios externos se cotizan por separado.
-            </p>
-            <SectionCta text="Cuéntanos qué necesitas y te preparamos una propuesta." />
-          </div>
-        </section>
+        <PricingSection onSelectPlan={selectPlan} onSelectService={selectService} />
 
         <section id="proyectos" className="content-section projects-section">
           <div className="container">
@@ -464,7 +435,7 @@ function App() {
                 <p><strong>Sin compromiso</strong><br />Revisaremos el alcance antes de definir la propuesta.</p>
               </div>
             </div>
-            <QuoteForm key={selectedService || 'default'} initialService={selectedService} />
+            <QuoteForm key={`${selectedService}-${selectedPlan}`} initialService={selectedService} initialPlan={selectedPlan} />
           </div>
         </section>
 

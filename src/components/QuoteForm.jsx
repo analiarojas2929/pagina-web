@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
-import { ArrowUpRight, Mail, Send, Sparkles, X } from 'lucide-react'
+import { ArrowUpRight, Check, Mail, Send, Sparkles, X } from 'lucide-react'
 import { brand, budgetOptions, createWhatsAppUrl, quoteServices } from '../data/siteData'
 import { isQuoteEmailConfigured, sendQuoteEmail } from '../services/quoteEmail'
 
-const initialState = (service) => ({
+const initialState = (service, plan) => ({
   name: '',
   company: '',
   email: '',
@@ -11,10 +11,11 @@ const initialState = (service) => ({
   service: service || '',
   budget: '',
   description: '',
+  plan: plan || '',
 })
 
-function QuoteForm({ initialService }) {
-  const [formData, setFormData] = useState(() => initialState(initialService))
+function QuoteForm({ initialService, initialPlan }) {
+  const [formData, setFormData] = useState(() => initialState(initialService, initialPlan))
   const [statusMessage, setStatusMessage] = useState('')
   const composerRef = useRef(null)
   const [draft, setDraft] = useState({ from: '', subject: '', message: '' })
@@ -26,7 +27,7 @@ function QuoteForm({ initialService }) {
   const handleChange = (event) => {
     const { name, value } = event.target
     setStatusMessage('')
-    setFormData((previous) => ({ ...previous, [name]: value }))
+    setFormData((previous) => ({ ...previous, [name]: value, ...(name === 'service' ? { plan: '' } : {}) }))
   }
 
   const buildQuoteMessage = () => [
@@ -42,6 +43,7 @@ function QuoteForm({ initialService }) {
     '',
     'DETALLES DEL PROYECTO',
     `Servicio requerido: ${formData.service}`,
+    ...(formData.plan ? [`Plan de interés: ${formData.plan}`] : []),
     `Presupuesto estimado: ${formData.budget}`,
     '',
     'Descripción:',
@@ -60,6 +62,7 @@ function QuoteForm({ initialService }) {
     `Mi nombre es ${formData.name.trim()}${formData.company.trim() ? `, de ${formData.company.trim()}` : ''}. Me gustaría cotizar el siguiente proyecto:`,
     '',
     `Servicio: ${formData.service}`,
+    ...(formData.plan ? [`Plan de interés: ${formData.plan}`] : []),
     `Presupuesto estimado: ${formData.budget}`,
     '',
     formData.description.trim(),
@@ -138,6 +141,8 @@ function QuoteForm({ initialService }) {
           <h3>Solicita una cotización</h3>
         </div>
       </div>
+
+      {formData.plan && <p className="quote-plan-selection"><Check size={15} aria-hidden="true" />Plan de interés: {formData.plan}</p>}
 
       <form className="quote-form" onSubmit={handleSubmit}>
         <div className="form-grid">
