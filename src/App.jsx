@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import {
   ArrowDown,
   ArrowRight,
@@ -65,6 +65,9 @@ function SectionCta({ text = '¿Tienes un proyecto en mente?' }) {
 }
 
 function App() {
+  const reduceMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll()
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 160, damping: 30 })
   const [menuOpen, setMenuOpen] = useState(false)
   const [selectedService, setSelectedService] = useState('')
   const [activeProjectCategory, setActiveProjectCategory] = useState('founders')
@@ -82,6 +85,7 @@ function App() {
   return (
     <div className="site-shell">
       <header className="site-header">
+        <motion.div className="reading-progress" style={{ scaleX: reduceMotion ? scrollYProgress : smoothProgress }} aria-hidden="true" />
         <div className="header-inner">
           <a href="#inicio" className="brand" aria-label={`${brand.name}, inicio`}>
             <BrandLogo className="header-brand-logo" variant="dark" width={232} height={72} loading="eager" />
@@ -114,20 +118,20 @@ function App() {
       <main>
         <section id="inicio" className="hero-section">
           <div className="hero-grid-pattern" aria-hidden="true" />
+          <div className="hero-ambient" aria-hidden="true"><span /><span /></div>
           <div className="container hero-layout">
             <motion.div
               className="hero-copy"
-              initial="hidden"
+              initial={reduceMotion ? false : 'hidden'}
               animate="visible"
-              variants={reveal}
-              transition={{ duration: 0.65, ease: 'easeOut' }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } } }}
             >
-              <p className="eyebrow"><span className="eyebrow-dot" /> {brand.slogan.toUpperCase()}</p>
-              <h1>Transformamos tus ideas en <span>soluciones digitales</span></h1>
-              <p className="hero-description">
+              <motion.p variants={reveal} className="eyebrow"><span className="eyebrow-dot" /> {brand.slogan.toUpperCase()}</motion.p>
+              <motion.h1 variants={reveal}>Transformamos tus ideas en <span>soluciones digitales</span></motion.h1>
+              <motion.p variants={reveal} className="hero-description">
                 En A&amp;D DIGITAL desarrollamos páginas web, software y experiencias digitales que ayudan a emprendedores y empresas a crecer.
-              </p>
-              <div className="hero-actions">
+              </motion.p>
+              <motion.div variants={reveal} className="hero-actions">
                 <ActionLink>
                   Solicitar cotización <ArrowUpRight size={17} aria-hidden="true" />
                 </ActionLink>
@@ -137,17 +141,17 @@ function App() {
                 <ActionLink href="#proyectos" secondary>
                   Ver proyectos <ArrowDown size={16} aria-hidden="true" />
                 </ActionLink>
-              </div>
-              <div className="trust-row" aria-label="Valores de A&D DIGITAL">
+              </motion.div>
+              <motion.div variants={reveal} className="trust-row" aria-label="Valores de A&D DIGITAL">
                 <span><BadgeCheck size={17} /> Equipo de dos fundadoras</span>
                 <span><BadgeCheck size={17} /> Desarrollo personalizado</span>
                 <span><BadgeCheck size={17} /> Atención cercana</span>
-              </div>
+              </motion.div>
             </motion.div>
 
             <motion.div
               className="hero-visual"
-              initial={{ opacity: 0, scale: 0.96 }}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, delay: 0.1 }}
               aria-hidden="true"
@@ -193,7 +197,7 @@ function App() {
                 <motion.article
                   className={`service-card ${index === 2 ? 'service-card-featured' : ''}`}
                   key={title}
-                  initial="hidden"
+                  initial={reduceMotion ? false : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.12 }}
                   variants={reveal}
@@ -231,8 +235,16 @@ function App() {
               description="Valores de referencia editables. Cada proyecto se cotiza de acuerdo con su alcance y necesidades."
             />
             <div className="plans-grid">
-              {plans.map((plan) => (
-                <article className={`plan-card ${plan.featured ? 'plan-card-featured' : ''}`} key={plan.title}>
+              {plans.map((plan, index) => (
+                <motion.article
+                  className={`plan-card ${plan.featured ? 'plan-card-featured' : ''}`}
+                  key={plan.title}
+                  initial={reduceMotion ? false : 'hidden'}
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.12 }}
+                  variants={reveal}
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                >
                   <p className="plan-kicker">A&amp;D DIGITAL</p>
                   <h3>{plan.title}</h3>
                   <p className="plan-price">{plan.price}</p>
@@ -244,7 +256,7 @@ function App() {
                   >
                     Solicitar cotización <ArrowRight size={15} aria-hidden="true" />
                   </a>
-                </article>
+                </motion.article>
               ))}
             </div>
             <p className="pricing-note">
@@ -283,8 +295,9 @@ function App() {
               {visiblePortfolio.map((project, index) => (
                 <motion.article
                   className="project-card"
+                  layout="position"
                   key={project.title}
-                  initial="hidden"
+                  initial={reduceMotion ? false : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.1 }}
                   variants={reveal}
@@ -350,7 +363,7 @@ function App() {
                 <motion.article
                   className="workflow-step"
                   key={step.number}
-                  initial="hidden"
+                  initial={reduceMotion ? false : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.2 }}
                   variants={reveal}
@@ -378,7 +391,7 @@ function App() {
                 <motion.article
                   className="founder-card"
                   key={`${founder.name}-${index}`}
-                  initial="hidden"
+                  initial={reduceMotion ? false : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.2 }}
                   variants={reveal}
