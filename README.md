@@ -16,32 +16,24 @@ npm run build
 npm run lint
 ```
 
-## Despliegue automático en Netlify
+## Publicar en Cloudflare Pages con ayd-digital.cl
 
-El archivo [`netlify.toml`](./netlify.toml) configura Node.js 22, valida el código y las pruebas antes de compilar, publica `dist` y permite abrir directamente rutas de React. También incluye los identificadores públicos de EmailJS para que el correo esté habilitado al desplegar.
+El sitio está preparado para Cloudflare Pages. El alojamiento gratuito requiere una cuenta de Cloudflare y vincular el repositorio una vez. El workflow de GitHub valida el proyecto; la publicación la realiza la integración de Cloudflare.
 
-Vinculación inicial (una sola vez):
+1. En Cloudflare, entra a **Workers & Pages → Create application → Pages → Connect to Git**.
+2. Conecta GitHub y selecciona **analiarojas2929/pagina-web**.
+3. Configura el nombre del proyecto como `ayd-digital` (si está disponible), rama de producción `main`, preset **React (Vite)**, comando `npm run build:production` y salida `dist`. Deja la raíz del proyecto vacía.
+4. Publica. Cloudflare asignará una URL `*.pages.dev`; usa la dirección real que muestre el panel.
+5. En Cloudflare, agrega **ayd-digital.cl** como zona con el plan Free y copia los dos nameservers que asigne a esa zona.
+6. En el registrador del dominio, configura esos dos nameservers. Los nombres exactos se obtienen del panel, no se pueden anticipar.
+7. En el proyecto Pages, abre **Custom domains → Set up a custom domain**, agrega `ayd-digital.cl` y completa la asociación. Agrega también `www.ayd-digital.cl` si deseas usarlo.
+8. En EmailJS, agrega `https://ayd-digital.cl` y la URL `*.pages.dev` real a los origenes permitidos; incluye `https://www.ayd-digital.cl` si lo configuras.
 
-1. En [Netlify](https://app.netlify.com/start), elige importar un proyecto existente desde **GitHub**.
-2. Selecciona **analiarojas2929/pagina-web** y la rama **main**.
-3. Netlify leerá el comando de compilación y la carpeta de publicación desde `netlify.toml`. Confirma la publicación.
-4. Agrega el dominio publicado a los orígenes permitidos de EmailJS.
+Cada push a `main` se desplegará automáticamente después de conectar GitHub a Cloudflare. El dominio empezará a servir la web cuando la zona esté activa, el dominio esté asociado al proyecto y el certificado HTTPS esté emitido.
 
-Si el sitio ya existe en Netlify, vincula ese mismo repositorio desde **Project configuration → Build & deploy → Continuous deployment**; no necesitas crear otro sitio.
+`.node-version` fija Node.js 22. `.env.production` contiene únicamente identificadores públicos de EmailJS para habilitar el formulario al compilar. El dominio canónico y las imágenes para compartir apuntan a `https://ayd-digital.cl/`.
 
-A partir de la vinculación, cada `git push` a `main` inicia automáticamente una compilación y un despliegue. Los cambios locales deben guardarse, confirmarse en Git y subirse a GitHub para publicarse. No hace falta cargar `dist` manualmente ni configurar un token de Netlify en GitHub Actions.
-
-## Publicar en GitHub Pages (alternativa)
-
-El despliegue se realiza automáticamente al subir cambios a la rama `main`.
-
-1. En GitHub, abre el repositorio y entra en **Settings → Pages**.
-2. En **Build and deployment → Source**, selecciona **GitHub Actions**.
-3. En VS Code, guarda los cambios y súbelos al repositorio (pestaña **Control de código fuente → Sincronizar cambios**).
-4. En GitHub, abre la pestaña **Actions** y espera a que termine el flujo **Deploy to GitHub Pages**.
-5. La dirección publicada aparecerá en **Settings → Pages**.
-
-La primera publicación puede tardar unos minutos. Cada nuevo cambio que se suba a `main` actualizará el sitio automáticamente.
+Documentacion: [integracion con Git](https://developers.cloudflare.com/pages/get-started/git-integration/) y [dominios propios](https://developers.cloudflare.com/pages/configuration/custom-domains/).
 
 ## Contenido editable
 
@@ -61,7 +53,7 @@ El formulario permite preparar una solicitud por WhatsApp o redactar y enviar un
 
 ### Activar el envío directo de correo
 
-El correo usa [EmailJS](https://www.emailjs.com/docs/), compatible con el alojamiento estático en GitHub Pages. No abre Gmail ni otra aplicación. Sin configuración, el botón de envío permanece deshabilitado y WhatsApp sigue disponible.
+El correo usa [EmailJS](https://www.emailjs.com/docs/), compatible con el alojamiento estático en Cloudflare Pages. No abre Gmail ni otra aplicación. Sin configuración, el botón de envío permanece deshabilitado y WhatsApp sigue disponible.
 
 1. Crea una cuenta en EmailJS y conecta la cuenta autorizada para enviar en **Email Services**.
 2. Crea una plantilla con estos campos:
@@ -72,7 +64,7 @@ El correo usa [EmailJS](https://www.emailjs.com/docs/), compatible con el alojam
    - **Subject:** `{{subject}}`.
    - **Content:** copia el contenido de [`docs/quote-email-template.html`](./docs/quote-email-template.html) en el editor HTML.
 3. Copia `.env.example` a `.env.local` y completa el Service ID, Template ID y Public Key. Reinicia `npm run dev`.
-4. Para GitHub Pages, agrega esos mismos tres valores como variables del repositorio en **Settings → Secrets and variables → Actions → Variables** y vuelve a desplegar.
+4. Para producción, los tres identificadores públicos están configurados en `.env.production`; puedes reemplazarlos por variables de compilación en Cloudflare Pages.
 5. En EmailJS, limita los dominios permitidos a los de tu sitio y al origen local que uses para desarrollo.
 
 Estas tres variables son identificadores públicos usados por el navegador. No agregues contraseñas, claves privadas ni tokens de Gmail a variables `VITE_`.
