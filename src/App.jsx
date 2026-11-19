@@ -239,7 +239,7 @@ function App() {
             <SectionTitle
               eyebrow="Proyectos"
               title="Experiencia y demos de las fundadoras"
-              description="Una selección de proyectos, demos y prototipos de las fundadoras. Explora sus tecnologías, funcionalidades y código disponible en GitHub."
+              description="Una selección de proyectos, demos y prototipos de las fundadoras. Explora las vistas previas y visita los proyectos que ya están publicados."
             />
             <div className="project-filters" role="group" aria-label="Filtrar proyectos">
               {portfolioCategories.map((category) => (
@@ -262,7 +262,8 @@ function App() {
             <div className="projects-grid">
               {visiblePortfolio.map((project, index) => (
                 <motion.article
-                  className="project-card"
+                  className={`project-card${project.demoUrl ? '' : ' project-card-image-only'}`}
+                  aria-label={project.title}
                   layout="position"
                   key={project.title}
                   initial={reduceMotion ? false : 'hidden'}
@@ -271,12 +272,11 @@ function App() {
                   variants={reveal}
                   transition={{ duration: 0.45, delay: (index % 2) * 0.08 }}
                 >
-                  <ProjectArtwork project={project} />
-                  <div className="project-content">
+                  <ProjectArtwork project={project} imageOnly={!project.demoUrl} />
+                  {project.demoUrl && <div className="project-content">
                     <div className="project-heading">
                       <div><span className="project-category">{project.category}</span><h3>{project.title}</h3></div>
-                      {project.demoUrl && <span className="access-badge">Demo disponible</span>}
-                      {!project.demoUrl && <span className="access-badge access-unavailable">Sin demo disponible</span>}
+                      <span className="access-badge">Demo disponible</span>
                     </div>
                     <p className="project-description">{project.description}</p>
                     <div className="project-details">
@@ -290,17 +290,9 @@ function App() {
                       </div></div>
                     </div>
                     <div className="project-actions">
-                      {project.demoUrl && (
-                        <a className="project-demo" href={project.demoUrl} target="_blank" rel="noreferrer">
-                          Ver proyecto <ExternalLink size={15} aria-hidden="true" />
-                        </a>
-                      )}
-                      {project.repositoryUrl && (
-                        <a className="project-demo" href={project.repositoryUrl} target="_blank" rel="noreferrer" aria-label={`Ver código de ${project.title} en GitHub`}>
-                          Ver código en GitHub <ExternalLink size={15} aria-hidden="true" />
-                        </a>
-                      )}
-                      {!project.demoUrl && !project.repositoryUrl && <span className="project-unavailable">Demo no disponible</span>}
+                      <a className="project-demo" href={project.demoUrl} target="_blank" rel="noreferrer">
+                        Ver proyecto <ExternalLink size={15} aria-hidden="true" />
+                      </a>
                       <a
                         className="similar-link"
                         href={createWhatsAppUrl(`Hola, nos interesa conversar con A&D DIGITAL sobre un proyecto similar a ${project.title}.`)}
@@ -311,7 +303,7 @@ function App() {
                       </a>
                     </div>
                     {project.demoLabel && <p className="demo-note">{project.demoLabel}</p>}
-                  </div>
+                  </div>}
                 </motion.article>
               ))}
             </div>

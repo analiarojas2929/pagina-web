@@ -944,6 +944,9 @@
   border-color: rgba(105, 178, 232, 0.3);
 }
 
+.project-card-image-only { align-self: start; }
+.project-card-image-only .project-artwork { border-bottom: 0; padding-block: 24px; }
+
 .project-content {
   padding: 19px 20px 17px;
 }
