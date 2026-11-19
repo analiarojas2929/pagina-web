@@ -1,0 +1,52 @@
+.service-page { min-height: 100vh; background: #0a1120; color: #e8eff8; }
+.service-page-header { border-bottom: 1px solid #8ca8d325; background: #0a1224; }
+.service-page-header > div { display: flex; justify-content: space-between; align-items: center; gap: 20px; min-height: 82px; }
+.service-page-brand { flex: 0 1 auto; min-width: 0; }
+.service-page-brand img { width: 220px; height: 70px; object-fit: contain; }
+.service-page-header nav { display: flex; align-items: center; gap: 24px; font-size: 13px; }
+.service-page-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 20px; border-radius: 9px; color: #0b1b2b; background: var(--gradient); font-size: 13px; font-weight: 650; }
+.service-page-hero { padding-block: 36px 72px; }
+.service-breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 54px; color: #9eafc5; font-size: 12px; }
+.service-breadcrumb a { min-height: 44px; display: inline-flex; align-items: center; color: #8ee4e9; }
+.service-page-hero h1 { max-width: 850px; margin: 0 0 24px; font-size: clamp(34px, 5vw, 60px); font-weight: 620; line-height: 1.12; letter-spacing: -.045em; }
+.service-page-lead { max-width: 750px; color: #b8c7d9; font-size: 18px; line-height: 1.8; }
+.service-page-audience { max-width: 680px; margin-bottom: 28px; color: #95a8bf; font-size: 14px; line-height: 1.8; }
+.service-page-scope { display: grid; grid-template-columns: 1.15fr 1fr; gap: 60px; padding-block: 50px; border-block: 1px solid #8ca8d325; }
+.service-page h2 { margin: 0 0 22px; color: #eef4fc; font-size: 28px; line-height: 1.25; font-weight: 550; letter-spacing: -.025em; }
+.service-page-scope ul { display: grid; gap: 18px; margin: 0; padding: 0; list-style: none; }
+.service-page-scope li { display: flex; align-items: baseline; gap: 12px; color: #b8c7d9; font-size: 14px; line-height: 1.7; }
+.service-page-scope li > span { color: #82e0e7; }
+.service-page-scope aside { padding: 28px; border: 1px solid #8ca8d325; border-radius: 14px; background: #122033; }
+.service-page-scope aside > p:not(.service-page-price) { color: #b6c6d9; font-size: 13px; line-height: 1.9; }
+.service-page-price { display: grid; gap: 5px; padding-bottom: 18px; border-bottom: 1px solid #8ca8d325; }
+.service-page-price > span { color: #a7c1da; font-size: 12px; }
+.service-page-price strong { color: #8be2e8; font-size: 23px; font-weight: 550; }
+.service-page-scope aside > a { display: inline-flex; align-items: center; min-height: 44px; color: #8be2e8; font-size: 13px; }
+.service-page-faq { padding-block: 60px; }
+.service-page-faq details { padding: 18px 0; border-bottom: 1px solid #8ca8d325; }
+.service-page-faq summary { cursor: pointer; font-size: 15px; }
+.service-page-faq details p { max-width: 850px; color: #aabdd2; font-size: 14px; line-height: 1.9; }
+.service-page-related { padding-bottom: 64px; }
+.service-page-related > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.service-page-related a { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 20px; border: 1px solid #8ca8d325; border-radius: 10px; color: #c5e9ed; font-size: 14px; }
+.service-page-footer { padding-block: 28px; border-top: 1px solid #8ca8d325; background: #080f1c; }
+.service-page-footer > div { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; color: #95a9c2; font-size: 12px; }
+.service-page-footer a { display: inline-flex; align-items: center; min-height: 44px; color: #b3dfe6; }
+.service-page-missing { padding-block: 80px; }
+.service-page-missing a { display: inline-flex; padding: 14px; color: #8be2e8; }
+@media (max-width:760px) {
+  .service-page-header > div { gap: 14px; }
+  .service-page-brand img { width: 170px; height: 64px; }
+  .service-page-header nav > a:first-child { display: none; }
+  .service-page-header .service-page-cta { max-width: 140px; padding: 10px; text-align: center; font-size: 11px; }
+  .service-page-hero { padding-block: 20px 44px; }
+  .service-breadcrumb { margin-bottom: 32px; }
+  .service-page-lead { font-size: 16px; }
+  .service-page-scope { grid-template-columns: 1fr; gap: 32px; padding-block: 36px; }
+  .service-page-scope aside { padding: 22px; }
+  .service-page-related > div { grid-template-columns: 1fr; }
+}
+@media (max-width:400px) {
+  .service-page-brand img { width: 140px; }
+  .service-page-header .service-page-cta { max-width: 124px; }
+}

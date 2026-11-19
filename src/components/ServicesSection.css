@@ -1,0 +1,99 @@
+.services-section {
+  position: relative;
+  border-block: 1px solid #9bb8df14;
+  background: radial-gradient(ellipse at 0 0, #33477318, transparent 55%), #0a1120;
+}
+
+.services-intro { display: grid; grid-template-columns: 1.2fr .8fr; align-items: end; gap: 64px; margin-bottom: 36px; }
+.services-intro .eyebrow { color: #99b6d5; font-size: 10px; letter-spacing: .12em; }
+.services-intro .eyebrow-dot { flex-shrink: 0; }
+.services-intro h2 { max-width: 680px; margin: 0; color: #eef3fa; font-size: clamp(32px, 3.6vw, 46px); font-weight: 570; line-height: 1.13; letter-spacing: -.045em; }
+.services-intro h2 > span { color: #8bdae3; }
+.services-intro-copy > span { color: #88a6c6; font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: .1em; }
+.services-intro-copy > p { margin: 12px 0 0; color: #aabed4; font-size: 14px; line-height: 1.85; }
+.services-filter-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding-block: 10px 24px; }
+.services-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.services-filters button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px; border: 1px solid #8aadc52b; border-radius: 24px; background: transparent; color: #9db3cd; font-size: 11px; cursor: pointer; transition: color 180ms ease, background 180ms ease, border-color 180ms ease; }
+.services-filters button:hover { color: #d5eaf3; border-color: #7ce0e66b; }
+.services-filters button[aria-pressed="true"] { color: #c9f0f3; border-color: #7ce0e67a; background: #7ce0e612; }
+.services-count { flex-shrink: 0; margin: 0; color: #7891ad; font-size: 11px; }
+.services-offers { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; }
+.service-offer {
+  --offer-accent: #a3b8ff;
+  --offer-tint: #6c82d917;
+  position: relative;
+  display: flex;
+  grid-column: span 4;
+  min-width: 0;
+  flex-direction: column;
+  padding: 26px;
+  border: 1px solid #96b2d326;
+  border-radius: 16px;
+  background: linear-gradient(145deg, var(--offer-tint), transparent 65%), #111c2d;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.service-offer-business { --offer-accent: #80d8d3; --offer-tint: #40878017; }
+.service-offer-support { --offer-accent: #e6c69b; --offer-tint: #a4784017; }
+.service-offer:hover { border-color: #9fbce151; box-shadow: 0 18px 45px #0002; }
+.services-offers[data-category="all"] .service-offer-lead { grid-column: span 6; padding: 30px; border-color: #889fee50; background: radial-gradient(ellipse at top right, #617eb523, transparent 70%), #142137; }
+.services-offers[data-category="all"] .service-offer-lead:nth-child(2) { --offer-accent: #8be4e3; border-color: #73d8df3d; background: radial-gradient(ellipse at top right, #3b9c9a20, transparent 70%), #122332; }
+.services-offers[data-category="business"] .service-offer { grid-column: span 6; }
+.services-offers[data-category="support"] .service-offer { grid-column: 1 / -1; width: min(100%, 760px); justify-self: center; }
+.service-offer-top { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.service-offer-top > span:nth-child(2) { color: var(--offer-accent); font-size: 10px; }
+.service-offer-icon { display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; border: 1px solid #a2bfd53b; border-radius: 13px; background: #ffffff05; color: var(--offer-accent); }
+.service-offer-number { margin-left: auto; color: #8aa0ba66; font-family: ui-monospace, monospace; font-size: 12px; }
+.service-offer h3 { margin: 0; color: #edf3fc; font-size: 23px; font-weight: 570; line-height: 1.25; letter-spacing: -.035em; }
+.services-offers[data-category="all"] .service-offer-lead h3 { font-size: 28px; }
+.service-offer-description { min-height: 80px; margin: 14px 0 20px; color: #afc1d7; font-size: 13px; line-height: 1.85; }
+.service-offer-audience { padding: 14px 16px; border-left: 2px solid var(--offer-accent); border-radius: 0 8px 8px 0; background: #ffffff03; }
+.service-offer-audience > span { color: var(--offer-accent); font-family: ui-monospace, monospace; font-size: 8px; letter-spacing: .1em; }
+.service-offer-audience > p { min-height: 38px; margin: 6px 0 0; color: #a7bcd3; font-size: 11px; line-height: 1.75; }
+.service-offer > ul { display: grid; align-content: start; gap: 12px; flex-grow: 1; margin: 22px 0 26px; padding: 0; list-style: none; }
+.service-offer li { display: flex; align-items: flex-start; gap: 9px; color: #c2d0e2; font-size: 12px; line-height: 1.7; }
+.service-offer li > svg { flex-shrink: 0; margin-top: 4px; color: var(--offer-accent); }
+.service-offer-value { display: grid; gap: 6px; margin-top: auto; padding-top: 20px; border-top: 1px solid #96b2d326; }
+.service-offer-value > span { color: #8fa7c2; font-size: 10px; }
+.service-offer-value > strong { color: #d6e7f6; font-size: 20px; font-weight: 550; line-height: 1.4; letter-spacing: -.025em; }
+.service-offer-value small { color: #98afc9; font-size: 10px; font-weight: 450; letter-spacing: normal; }
+.service-offer-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 16px; margin-top: 18px; }
+.service-offer-actions > a { display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; color: var(--offer-accent); font-size: 12px; font-weight: 650; }
+.service-offer-actions > a:first-child { width: 100%; padding: 10px 14px; border: 1px solid #9ab7cf3d; border-radius: 8px; background: #ffffff04; transition: background 180ms ease, border-color 180ms ease; }
+.service-offer-actions > a:first-child:hover { border-color: var(--offer-accent); background: var(--offer-tint); }
+.service-offer-actions .service-offer-detail { color: #a4b9d2; font-size: 11px; font-weight: 450; }
+.services-offers[data-category="all"] .service-offer-lead .service-offer-actions > a:first-child { width: auto; min-width: 200px; }
+.services-guidance { display: flex; align-items: center; gap: 20px; margin-top: 26px; padding: 24px 28px; border: 1px solid #96b2d32e; border-radius: 14px; background: #132033; }
+.services-guidance-icon { display: grid; flex: 0 0 auto; place-items: center; width: 46px; height: 46px; border: 1px solid #7ce0e633; border-radius: 50%; color: #8de2e8; background: #7ce0e60a; }
+.services-guidance > div { flex: 1; min-width: 0; }
+.services-guidance h3 { margin: 0 0 8px; color: #dce9f8; font-size: 16px; font-weight: 550; letter-spacing: -.015em; }
+.services-guidance p { margin: 0; color: #99b0cb; font-size: 12px; line-height: 1.7; }
+.services-guidance > a { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 12px; min-height: 44px; padding: 10px 16px; border: 1px solid #7ce0e65c; border-radius: 24px; color: #9ce5ec; font-size: 12px; }
+.services-scope-note { max-width: 950px; margin: 22px auto 0; color: #849bb7; font-size: 11px; line-height: 1.85; text-align: center; }
+
+@media (max-width:1000px) {
+  .services-intro { gap: 32px; }
+  .service-offer, .services-offers[data-category="all"] .service-offer-lead { grid-column: span 6; padding: 24px; }
+  .service-offer-description { min-height: 72px; }
+}
+@media (max-width:760px) {
+  .services-intro { grid-template-columns: 1fr; gap: 24px; }
+  .services-intro h2 { max-width: 540px; font-size: 36px; }
+  .services-filter-row { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .services-filters button { font-size: 12px; padding-inline: 14px; }
+  .services-offers { gap: 16px; }
+  .service-offer, .services-offers[data-category="all"] .service-offer-lead, .services-offers[data-category="business"] .service-offer { grid-column: 1 / -1; }
+  .service-offer h3, .services-offers[data-category="all"] .service-offer-lead h3 { font-size: 26px; }
+  .service-offer-description, .service-offer-audience > p { min-height: 0; }
+  .service-offer-description { font-size: 14px; }
+  .service-offer-audience > p, .service-offer li { font-size: 13px; }
+  .service-offer-actions > a { font-size: 13px; }
+  .services-guidance { align-items: flex-start; flex-wrap: wrap; padding: 22px; gap: 16px; }
+  .services-guidance-icon { width: 38px; height: 38px; }
+  .services-guidance > div { flex-basis: calc(100% - 54px); }
+  .services-guidance > a { width: 100%; }
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .service-offer-icon, .service-offer-actions > a > svg { transition: transform 200ms ease; }
+  .service-offer:hover .service-offer-icon { transform: translateY(-3px) rotate(-4deg); }
+  .service-offer-actions > a:hover > svg { transform: translateX(3px); }
+}

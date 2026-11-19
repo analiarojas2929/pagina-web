@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, Check, ChevronDown, Code2, MonitorSmartphone, Rocket } from 'lucide-react'
 import { complementaryPlans, formatCLP, planComparisonRows, plans } from '../data/siteData'
 import './PricingSection.css'
+import PlanFinder from './PlanFinder'
 
 export default function PricingSection({ onSelectPlan, onSelectService }) {
   const reduceMotion = useReducedMotion()
@@ -14,6 +15,7 @@ export default function PricingSection({ onSelectPlan, onSelectService }) {
           <div className="pricing-intro-copy"><p>Elige el alcance que necesita tu negocio.</p><span>Diseño propio, desarrollo a medida y el mismo cuidado en cada proyecto. La diferencia está en cuántas páginas, funciones e interacciones construimos.</span></div>
         </div>
 
+        <PlanFinder onSelectPlan={onSelectPlan} />
         <div className="pricing-plan-grid">
           {plans.map((plan, index) => (
             <motion.article

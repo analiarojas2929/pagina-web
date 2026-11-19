@@ -42,34 +42,28 @@ function ConceptPreview({ project }) {
   )
 }
 
-export default function ProjectArtwork({ project, imageOnly = false }) {
+export default function ProjectArtwork({ project }) {
   const previewRef = useRef(null)
   return (
     <>
-      <div
-        className={`project-artwork project-visual-${styles[project.title] || 'data'}`}
-        role={imageOnly && !project.image ? 'img' : undefined}
-        aria-label={imageOnly && !project.image ? `Ilustración de interfaz de ${project.title}` : undefined}
-      >
-        {!imageOnly && <div className="project-visual-heading"><span>{project.category}</span><span>{project.image ? 'VISTA DEL PROYECTO' : 'CONCEPTO VISUAL'}</span></div>}
+      <div className={`project-artwork project-visual-${styles[project.title] || 'data'}`}>
+        <div className="project-visual-heading"><span>{project.category}</span><span>{project.image ? 'VISTA DEL PROYECTO' : 'CONCEPTO VISUAL'}</span></div>
         <div className="project-browser">
           <div className="project-browser-toolbar" aria-hidden="true">
             <span className="project-browser-dots"><i /><i /><i /></span>
             <span className="project-browser-title">{project.title}</span>
             <span className="project-browser-menu">•••</span>
           </div>
-          {project.image && imageOnly ? (
-            <img className="project-screenshot-static" src={project.image} alt={`Captura de ${project.title}`} loading="lazy" />
-          ) : project.image ? (
+          {project.image ? (
             <button className="project-screenshot-button" type="button" onClick={() => previewRef.current.showModal()} aria-label={`Ampliar captura de ${project.title}`}>
               <img src={project.image} alt={`Captura de ${project.title}`} loading="lazy" />
               <span className="project-expand"><Maximize2 size={13} /> Ampliar</span>
             </button>
           ) : <ConceptPreview project={project} />}
         </div>
-        {!imageOnly && <span className="project-visual-caption">{project.image ? 'Explora cada detalle' : 'Ilustración de interfaz · no es una captura'}</span>}
+        <span className="project-visual-caption">{project.image ? 'Explora cada detalle' : 'Ilustración de interfaz · no es una captura'}</span>
       </div>
-      {project.image && !imageOnly && <dialog ref={previewRef} className="project-image-dialog" aria-label={`Captura ampliada de ${project.title}`}>
+      {project.image && <dialog ref={previewRef} className="project-image-dialog" aria-label={`Captura ampliada de ${project.title}`}>
         <header><strong>{project.title}</strong><button type="button" onClick={() => previewRef.current.close()} aria-label="Cerrar captura"><X size={20} /></button></header>
         <img src={project.image} alt={`Captura ampliada de ${project.title}`} />
       </dialog>}

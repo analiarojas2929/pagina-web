@@ -33,7 +33,6 @@
 .project-screenshot-button { position: relative; display: block; width: 100%; padding: 0; border: 0; background: #f6f7fa; cursor: zoom-in; overflow: hidden; }
 .project-artwork .project-screenshot-button img { display: block; width: 100%; height: auto; max-height: none; aspect-ratio: 2 / 1; object-fit: cover; object-position: top; transition: transform 400ms ease; }
 .project-screenshot-button:hover img { transform: scale(1.025); }
-.project-screenshot-static { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; object-position: top; }
 .project-expand { position: absolute; bottom: 10px; right: 10px; display: flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid #ffffff3d; border-radius: 20px; color: #fff; background: #101724e8; font-size: 10px; box-shadow: 0 2px 8px #0003; }
 .project-visual-caption { text-align: center; color: #a2adc2; font-size: 9px; }
 .project-concept { aspect-ratio: 2 / 1; padding: 12px 16px; color: #e8edf7; background: radial-gradient(ellipse at top right, var(--visual-glow), transparent 80%), #101724; }

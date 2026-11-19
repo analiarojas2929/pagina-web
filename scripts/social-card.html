@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portada para compartir · A&amp;D DIGITAL</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        color: #f4f7ff;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #0d1933;
+      }
+      .cover {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        isolation: isolate;
+        background:
+          radial-gradient(ellipse at 50% 28%, #243a62 0%, transparent 55%),
+          radial-gradient(ellipse at 0% 100%, #0c3f55 0%, transparent 48%),
+          radial-gradient(ellipse at 100% 100%, #302354 0%, transparent 48%),
+          #0d1933;
+      }
+      .orbit {
+        position: absolute;
+        z-index: -1;
+        inset: 65px -180px;
+        border: 1px solid #6bcce426;
+        border-radius: 50%;
+        transform: rotate(-18deg);
+      }
+      .orbit-secondary { inset: -200px 150px; transform: rotate(-35deg); border-color: #a89cfa17; }
+      .accent {
+        position: absolute;
+        left: 552px;
+        bottom: 155px;
+        width: 96px;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, #3ee2ee, #8465fa);
+      }
+      /* Keep the complete brand inside the central square for tighter previews. */
+      .brand-symbol { position: absolute; top: 77px; left: 425px; width: 350px; height: 222px; }
+      h1 {
+        position: absolute;
+        top: 314px;
+        left: 285px;
+        width: 630px;
+        margin: 0;
+        text-align: center;
+        font-size: 68px;
+        font-weight: 750;
+        line-height: 1.15;
+        letter-spacing: -2.5px;
+      }
+      h1 span { color: #96e6f7; }
+      .description {
+        position: absolute;
+        top: 414px;
+        left: 285px;
+        width: 630px;
+        margin: 0;
+        text-align: center;
+        font-size: 29px;
+        line-height: 1.4;
+        font-weight: 400;
+        color: #c7d4eb;
+      }
+      .domain {
+        position: absolute;
+        top: 511px;
+        left: 285px;
+        width: 630px;
+        margin: 0;
+        text-align: center;
+        font-size: 23px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        color: #95aecd;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="cover" aria-label="A&D DIGITAL. Web y software a medida. ayd-digital.cl">
+      <div class="orbit" aria-hidden="true"></div>
+      <div class="orbit orbit-secondary" aria-hidden="true"></div>
+      <!-- Reuse the original symbol; the wordmark below stays legible on dark backgrounds. -->
+      <svg class="brand-symbol" viewBox="0 0 980 620" role="img" aria-label="Símbolo de A&D DIGITAL">
+        <image href="../public/assets/logo-ayd-digital-dark.png" width="2000" height="620" />
+      </svg>
+      <h1>A&amp;D <span>DIGITAL</span></h1>
+      <p class="description">Web y software a medida</p>
+      <div class="accent" aria-hidden="true"></div>
+      <p class="domain">ayd-digital.cl</p>
+    </main>
+  </body>
+</html>

@@ -1,4 +1,5 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import { motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import {
   ArrowDown,
@@ -20,6 +21,9 @@ import QuoteForm from './components/QuoteForm'
 import ProjectArtwork from './components/ProjectArtwork'
 import HeroVisual from './components/HeroVisual'
 import PricingSection from './components/PricingSection'
+import DeliverySection from './components/DeliverySection'
+import ServicePage from './components/ServicePage'
+import ServicesSection from './components/ServicesSection'
 import SectionTitle from './components/SectionTitle'
 import {
   brand,
@@ -30,10 +34,11 @@ import {
   navItems,
   portfolio,
   portfolioCategories,
-  services,
   workflow,
 } from './data/siteData'
 import './App.css'
+import './components/Improvements.css'
+import { servicePages } from './data/servicePages'
 
 const reveal = {
   hidden: { opacity: 0, y: 22 },
@@ -70,22 +75,35 @@ function SectionCta({ text = '¿Tienes un proyecto en mente?' }) {
   )
 }
 
-function App() {
+function HomePage() {
   const reduceMotion = useReducedMotion()
   const heroRef = useRef(null)
   const heroInView = useInView(heroRef, { amount: 0.08 })
   const { scrollYProgress } = useScroll()
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 160, damping: 30 })
   const [menuOpen, setMenuOpen] = useState(false)
-  const [selectedService, setSelectedService] = useState('')
+  const [selectedService, setSelectedService] = useState(() => {
+    const slug = new URLSearchParams(window.location.search).get('servicio')
+    return servicePages.find(service => service.slug === slug)?.service || ''
+  })
   const [selectedPlan, setSelectedPlan] = useState('')
   const [activeProjectCategory, setActiveProjectCategory] = useState('founders')
+  const availableProjectCategories = portfolioCategories.filter((category) => portfolio.some((project) =>
+    project.group === category.id || (category.id === 'demos' && project.isDemo),
+  ))
   const visiblePortfolio = portfolio.filter((project) =>
     project.group === activeProjectCategory || (activeProjectCategory === 'demos' && project.isDemo),
   )
   const projectEmptyMessage = activeProjectCategory === 'agency'
     ? 'Aún no hemos añadido proyectos comerciales de A&D DIGITAL. Las referencias disponibles se muestran como experiencia de las fundadoras.'
     : 'Las demos comerciales se publicarán aquí cuando estén disponibles.'
+
+  useEffect(() => {
+    const target = document.getElementById(window.location.hash.slice(1))
+    if (!target) return
+    const frame = requestAnimationFrame(() => target.scrollIntoView({ behavior: 'instant' }))
+    return () => cancelAnimationFrame(frame)
+  }, [])
 
   const selectService = (serviceTitle) => {
     setSelectedService(serviceTitle)
@@ -190,47 +208,7 @@ function App() {
           </div>
         </section>
 
-        <section id="servicios" className="content-section">
-          <div className="container">
-            <SectionTitle
-              eyebrow="Servicios y precios"
-              title="Servicios pensados para impulsar tu negocio"
-              description="Diseñamos y desarrollamos soluciones digitales para emprendedores y empresas, desde una página web hasta software a medida."
-            />
-            <div className="services-grid">
-              {services.map(({ icon: Icon, title, price, description, includes }, index) => (
-                <motion.article
-                  className={`service-card ${index === 2 ? 'service-card-featured' : ''}`}
-                  key={title}
-                  initial={reduceMotion ? false : 'hidden'}
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.12 }}
-                  variants={reveal}
-                  transition={{ duration: 0.45, delay: (index % 3) * 0.07 }}
-                >
-                  <div className="service-icon"><Icon size={20} aria-hidden="true" /></div>
-                  <h3>{title}</h3>
-                  <p className="service-description">{description}</p>
-                  <p className="service-price">{price}</p>
-                  <ul className="service-includes">
-                    {includes.map((feature) => <li key={feature}><Check size={15} />{feature}</li>)}
-                  </ul>
-                  <a
-                    className="service-link"
-                    href="#cotizacion"
-                    onClick={() => selectService(title)}
-                  >
-                    Solicitar cotización <ArrowRight size={16} aria-hidden="true" />
-                  </a>
-                </motion.article>
-              ))}
-            </div>
-            <p className="pricing-note">
-              Solicita una cotización para definir el alcance de tu servicio. Dominio, hosting y servicios externos se cotizan por separado.
-            </p>
-            <SectionCta text="¿No sabes qué servicio se ajusta a tu idea?" />
-          </div>
-        </section>
+        <ServicesSection onSelectService={selectService} />
 
         <PricingSection onSelectPlan={selectPlan} onSelectService={selectService} />
 
@@ -242,7 +220,7 @@ function App() {
               description="Una selección de proyectos, demos y prototipos de las fundadoras. Explora las vistas previas y visita los proyectos que ya están publicados."
             />
             <div className="project-filters" role="group" aria-label="Filtrar proyectos">
-              {portfolioCategories.map((category) => (
+              {availableProjectCategories.map((category) => (
                 <button
                   type="button"
                   className={activeProjectCategory === category.id ? 'project-filter project-filter-active' : 'project-filter'}
@@ -262,7 +240,7 @@ function App() {
             <div className="projects-grid">
               {visiblePortfolio.map((project, index) => (
                 <motion.article
-                  className={`project-card${project.demoUrl ? '' : ' project-card-image-only'}`}
+                  className="project-card"
                   aria-label={project.title}
                   layout="position"
                   key={project.title}
@@ -272,24 +250,28 @@ function App() {
                   variants={reveal}
                   transition={{ duration: 0.45, delay: (index % 2) * 0.08 }}
                 >
-                  <ProjectArtwork project={project} imageOnly={!project.demoUrl} />
-                  {project.demoUrl && <div className="project-content">
+                  <ProjectArtwork project={project} />
+                  <div className="project-content">
                     <div className="project-heading">
                       <div><span className="project-category">{project.category}</span><h3>{project.title}</h3></div>
-                      <span className="access-badge">Demo disponible</span>
+                      {project.demoUrl && <span className="access-badge">Demo disponible</span>}
                     </div>
                     <p className="project-description">{project.description}</p>
+                    {project.caseStudy && <details className="project-case-study">
+                      <summary>Conoce el proyecto <ChevronDown size={16} aria-hidden="true" /></summary>
+                      <div><span>EL DESAFÍO</span><p>{project.caseStudy.challenge}</p></div>
+                      <div><span>LA SOLUCIÓN</span><p>{project.caseStudy.solution}</p></div>
+                      <p className="project-case-explore"><strong>Qué puedes explorar</strong>{project.caseStudy.explore}</p>
+                    </details>}
                     <div className="project-details">
-                      <div><small>TECNOLOGÍAS</small><div className="tag-list">
-                        {project.technologies.length
-                          ? project.technologies.map((technology) => <span key={technology}>{technology}</span>)
-                          : <span>Detalles no especificados</span>}
-                      </div></div>
+                      {project.technologies.length > 0 && <div><small>TECNOLOGÍAS</small><div className="tag-list">
+                        {project.technologies.map((technology) => <span key={technology}>{technology}</span>)}
+                      </div></div>}
                       <div><small>ENFOQUE</small><div className="tag-list">
                         {project.features.map((feature) => <span key={feature}>{feature}</span>)}
                       </div></div>
                     </div>
-                    <div className="project-actions">
+                    {project.demoUrl && <div className="project-actions">
                       <a className="project-demo" href={project.demoUrl} target="_blank" rel="noreferrer">
                         Ver proyecto <ExternalLink size={15} aria-hidden="true" />
                       </a>
@@ -301,9 +283,9 @@ function App() {
                       >
                         Solicitar uno similar <ArrowUpRight size={15} aria-hidden="true" />
                       </a>
-                    </div>
+                    </div>}
                     {project.demoLabel && <p className="demo-note">{project.demoLabel}</p>}
-                  </div>}
+                  </div>
                 </motion.article>
               ))}
             </div>
@@ -338,6 +320,8 @@ function App() {
             <SectionCta text="El primer paso es una conversación." />
           </div>
         </section>
+
+        <DeliverySection />
 
         <section id="equipo" className="content-section team-section">
           <div className="container">
@@ -494,4 +478,10 @@ function App() {
   )
 }
 
-export default App
+export default function App() {
+  return <Routes>
+    <Route path="/" element={<HomePage />} />
+    <Route path="/servicios/:slug" element={<ServicePage />} />
+    <Route path="*" element={<ServicePage />} />
+  </Routes>
+}

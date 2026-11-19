@@ -1,8 +1,9 @@
+import { brand } from './brand'
 import analiaRojasPhoto from '../assets/analia-rojas.jpeg'
 import damarisTapiaPhoto from '../assets/damaris-tapia.jpeg'
-import portalVehicularImage from '../assets/portal-vehicular.png'
-import mamaSoyYoImage from '../assets/mama-soy-yo.png'
-import fitzoneImage from '../assets/fitzone.png'
+import portalVehicularImage from '../assets/portal-vehicular.webp'
+import mamaSoyYoImage from '../assets/mama-soy-yo.webp'
+import fitzoneImage from '../assets/fitzone.webp'
 
 import {
   BarChart3,
@@ -15,13 +16,7 @@ import {
   ShoppingBag,
 } from 'lucide-react'
 
-export const brand = {
-  name: 'A&D DIGITAL',
-  slogan: 'Soluciones digitales que impulsan tus ideas',
-  email: 'ayd.digital.vregion@gmail.com',
-  whatsappNumber: '56984930469',
-  location: 'Valparaíso, Chile',
-}
+export { brand }
 
 export const navItems = [
   { label: 'Servicios', href: '#servicios' },
@@ -35,134 +30,82 @@ export const services = [
   {
     icon: Globe2,
     title: 'Desarrollo de páginas web',
-    description: 'Sitios profesionales para comunicar tu propuesta y generar confianza online.',
-    includes: ['Diseño adaptable', 'Secciones a la medida', 'Integración de contacto'],
+    category: 'web',
+    planId: 'profesional',
+    idealFor: 'Empresas que necesitan mostrar sus servicios, proyectos y equipo.',
+    slug: 'desarrollo-web',
+    description: 'Presenta tu empresa en una web clara, con espacio para explicar lo que haces y recibir nuevas consultas.',
+    includes: ['Estructura y diseño a medida', 'Galería y secciones según tu plan', 'Formulario y canales de contacto'],
   },
   {
     icon: LayoutTemplate,
     title: 'Landing pages',
-    description: 'Páginas enfocadas en presentar una oferta y facilitar el contacto con tus clientes.',
-    includes: ['Estructura enfocada en conversión', 'Diseño responsive', 'Llamados a la acción'],
+    category: 'web',
+    planId: 'esencial',
+    idealFor: 'Un servicio, una campaña o el lanzamiento de tu emprendimiento.',
+    slug: 'landing-pages',
+    description: 'Concentra tu oferta en una sola página, con un mensaje directo y un camino sencillo para contactarte.',
+    includes: ['Una página con un objetivo claro', 'Adaptación a celular y escritorio', 'Botones y llamados a la acción'],
   },
   {
     icon: BriefcaseBusiness,
     title: 'Portafolios profesionales',
-    description: 'Una presencia online para mostrar tu trabajo, experiencia y formas de contacto.',
-    includes: ['Perfil y presentación', 'Galería o proyectos', 'Enlaces de contacto'],
+    category: 'web',
+    idealFor: 'Profesionales independientes, creativos y personas que quieren mostrar su trabajo.',
+    description: 'Reúne tu experiencia y tus mejores trabajos en un espacio propio que puedas compartir con clientes o empleadores.',
+    includes: ['Presentación y perfil profesional', 'Selección de trabajos y proyectos', 'Enlaces de contacto y redes'],
   },
   {
     icon: ShoppingBag,
     title: 'Tiendas online',
-    description: 'Experiencias de compra digitales ajustadas a tus productos y operación.',
-    includes: ['Catálogo y estructura a definir', 'Flujo de compra según alcance', 'Integraciones a evaluar'],
+    category: 'business',
+    idealFor: 'Negocios que necesitan ofrecer productos y definir su proceso de venta online.',
+    description: 'Organiza tus productos y construye un recorrido de compra acorde a cómo funciona tu negocio.',
+    includes: ['Catálogo y categorías de productos', 'Flujo de pedidos según alcance', 'Pagos e integraciones a evaluar'],
   },
   {
     icon: Code2,
     title: 'Software a medida',
-    description: 'Desarrollo de soluciones digitales según los requerimientos de tu negocio.',
-    includes: ['Levantamiento de requerimientos', 'Funcionalidades personalizadas', 'Alcance definido en cotización'],
+    category: 'business',
+    idealFor: 'Procesos específicos que necesitan una herramienta diseñada para tu operación.',
+    slug: 'software-a-medida',
+    description: 'Transforma una necesidad concreta en una aplicación con las pantallas y funciones que tu equipo realmente utiliza.',
+    includes: ['Definición de procesos y requisitos', 'Pantallas y funcionalidades a medida', 'Pruebas y entrega por alcance'],
   },
   {
     icon: MonitorCog,
     title: 'Sistemas de gestión',
-    description: 'Herramientas digitales que responden a procesos y necesidades concretas.',
-    includes: ['Flujos de trabajo a medida', 'Gestión según requerimientos', 'Propuesta por alcance'],
+    category: 'business',
+    idealFor: 'Equipos que necesitan organizar información y dar seguimiento a sus tareas.',
+    description: 'Centraliza la información de tu operación con flujos de trabajo definidos para tu negocio.',
+    includes: ['Registro y consulta de información', 'Roles y permisos según necesidad', 'Reportes y flujos a definir'],
   },
   {
     icon: BarChart3,
     title: 'Menús digitales',
-    description: 'Presenta tus productos y servicios en un formato fácil de consultar desde el celular.',
-    includes: ['Diseño móvil', 'Secciones de productos o servicios', 'Acceso mediante enlace o QR'],
+    category: 'business',
+    idealFor: 'Restaurantes, cafeterías y negocios que quieren compartir su carta fácilmente.',
+    description: 'Tu carta, organizada y accesible desde el celular mediante un enlace o código QR.',
+    includes: ['Productos organizados por categoría', 'Diseño pensado para celular', 'Enlace compartible y código QR'],
   },
   {
     icon: LifeBuoy,
     title: 'Mantenimiento web',
-    description: 'Acompañamiento para mantener tu sitio actualizado y funcionando.',
-    includes: ['Revisión según necesidades', 'Ajustes acordados', 'Soporte por cotización'],
+    category: 'support',
+    idealFor: 'Negocios que ya tienen una web y necesitan mantenerla al día.',
+    description: 'Actualiza el contenido y revisa el funcionamiento de tu sitio con un plan de trabajo definido.',
+    includes: ['Revisión inicial de tu sitio', 'Actualizaciones y ajustes acordados', 'Soporte con alcance definido'],
   },
 ]
 
-export const plans = [
-  {
-    id: 'esencial',
-    title: 'Esencial',
-    service: 'Landing pages',
-    amount: 180000,
-    eyebrow: '01 / Tu primera presencia digital',
-    description: 'Una página para presentar tu negocio, explicar tu servicio y facilitar que te contacten.',
-    idealFor: 'Un servicio, una campaña o un negocio que está comenzando.',
-    distinction: 'Una sola página, con el contenido justo para dar el primer paso.',
-    features: ['1 página con hasta 5 secciones', 'Diseño a medida y desarrollo en React', 'Adaptación a celular, tablet y escritorio', 'Botón de WhatsApp y enlaces de contacto', 'Carga de textos e imágenes que nos entregues', '1 ronda de ajustes sobre el diseño acordado'],
-    breakdown: [
-      { label: 'Diseño y estructura del contenido', amount: 50000 },
-      { label: 'Desarrollo de la página adaptable', amount: 90000 },
-      { label: 'Enlaces y canales de contacto', amount: 20000 },
-      { label: 'Pruebas y publicación inicial', amount: 20000 },
-    ],
-    comparison: { structure: '1 página · hasta 5 secciones', contact: 'WhatsApp y enlaces de contacto', gallery: 'Imágenes dentro de las secciones', motion: 'Transiciones básicas', interaction: 'Navegación y botones', revisions: '1 ronda' },
-    cta: 'Quiero empezar',
-    featured: false,
-  },
-  {
-    id: 'profesional',
-    title: 'Profesional',
-    service: 'Desarrollo de páginas web',
-    amount: 320000,
-    eyebrow: '02 / Más espacio para tu negocio',
-    description: 'Una web completa para mostrar tus servicios, proyectos y equipo, y recibir solicitudes desde la página.',
-    idealFor: 'Empresas y profesionales que necesitan explicar mejor su propuesta.',
-    distinction: 'Suma galería ampliable, animaciones y un formulario con envío de correo.',
-    features: ['Portada con hasta 10 secciones', '1 página interior adicional', 'Galería de proyectos con imágenes ampliables', 'Animaciones de entrada y microinteracciones', 'Formulario de contacto con envío mediante EmailJS', '2 rondas de ajustes sobre el diseño acordado'],
-    breakdown: [
-      { label: 'Diseño personalizado y estructura', amount: 80000 },
-      { label: 'Desarrollo de páginas y secciones', amount: 140000 },
-      { label: 'Galería, animaciones y formulario', amount: 60000 },
-      { label: 'Pruebas y publicación inicial', amount: 40000 },
-    ],
-    comparison: { structure: 'Portada de hasta 10 secciones + 1 página interior', contact: 'WhatsApp + formulario con envío de correo', gallery: 'Galería ampliable de proyectos', motion: 'Entradas, efectos en botones y tarjetas', interaction: 'Filtros de contenido y preguntas desplegables', revisions: '2 rondas' },
-    cta: 'Hablemos de este plan',
-    badge: 'Para una web como la nuestra',
-    featured: true,
-  },
-  {
-    id: 'premium',
-    title: 'Premium',
-    service: 'Desarrollo de páginas web',
-    amount: 520000,
-    eyebrow: '03 / Una experiencia más completa',
-    description: 'Más páginas y recorridos de contenido para marcas con distintas líneas de servicio o catálogos informativos.',
-    idealFor: 'Negocios con más contenido y necesidades de interacción específicas.',
-    distinction: 'Amplía la estructura y personaliza cómo las personas exploran tus servicios.',
-    features: ['Portada con hasta 10 secciones', 'Hasta 4 páginas interiores', 'Todo lo del Profesional, con mayor alcance', 'Catálogo informativo con categorías y filtros', 'Formularios con campos y validaciones a medida', '3 rondas de ajustes sobre el diseño acordado'],
-    breakdown: [
-      { label: 'Arquitectura de contenido y diseño', amount: 120000 },
-      { label: 'Desarrollo del sitio multipágina', amount: 240000 },
-      { label: 'Catálogo, filtros y formularios', amount: 100000 },
-      { label: 'Pruebas y publicación inicial', amount: 60000 },
-    ],
-    comparison: { structure: 'Portada de hasta 10 secciones + hasta 4 páginas interiores', contact: 'Formularios personalizados con envío de correo', gallery: 'Galería + catálogo informativo por categorías', motion: 'Animaciones e interacciones adaptadas al sitio', interaction: 'Filtros y recorridos de contenido personalizados', revisions: '3 rondas' },
-    cta: 'Quiero una web más completa',
-    featured: false,
-  },
+export const serviceCategories = [
+  { id: 'all', label: 'Todos los servicios' },
+  { id: 'web', label: 'Web y presencia digital' },
+  { id: 'business', label: 'Ventas y gestión' },
+  { id: 'support', label: 'Soporte y mantenimiento' },
 ]
 
-export const formatCLP = (amount) => new Intl.NumberFormat('es-CL', {
-  style: 'currency', currency: 'CLP', maximumFractionDigits: 0,
-}).format(amount)
-
-export const planComparisonRows = [
-  { key: 'structure', label: 'Páginas y contenido' },
-  { key: 'contact', label: 'Contacto' },
-  { key: 'gallery', label: 'Imágenes y proyectos' },
-  { key: 'motion', label: 'Animaciones' },
-  { key: 'interaction', label: 'Interacción' },
-  { key: 'revisions', label: 'Ajustes incluidos' },
-]
-
-export const complementaryPlans = [
-  { title: 'Menú digital', service: 'Menús digitales', amount: 60000, description: 'Una carta digital de hasta 30 productos, organizada por categorías, con enlace para compartir y código QR. Sin pedidos ni pagos online.' },
-  { title: 'Portafolio personal', service: 'Portafolios profesionales', amount: 120000, description: 'Una página con hasta 3 secciones: presentación, hasta 6 trabajos y contacto. Contenido entregado por el cliente.' },
-]
+export { plans, formatCLP, planComparisonRows, complementaryPlans } from './pricingData'
 
 export const portfolioCategories = [
   { id: 'agency', label: 'Proyectos de la agencia' },
@@ -173,6 +116,11 @@ export const portfolioCategories = [
 export const portfolio = [
   {
     title: 'FitZone Gym',
+    caseStudy: {
+      challenge: 'Reunir la información del gimnasio y facilitar que una persona encuentre cómo comenzar a entrenar.',
+      solution: 'Una web con planes, clases y horarios, acompañada de un portal de demostración con rutinas y seguimiento del progreso.',
+      explore: 'Recorre los planes, consulta las clases y conoce la propuesta del portal de usuario.',
+    },
     category: 'Web para gimnasio',
     description: 'Sitio de gimnasio con planes, clases y horarios, más un portal de demostración con rutinas, calendario y seguimiento del progreso.',
     technologies: ['React', 'Vite', 'Tailwind CSS', 'Node.js', 'PostgreSQL'],
@@ -186,6 +134,11 @@ export const portfolio = [
   },
   {
     title: 'PortalVehicular',
+    caseStudy: {
+      challenge: 'Organizar la presentación de vehículos en un sitio orientado a su búsqueda y consulta.',
+      solution: 'Un marketplace desarrollado con Next.js, con una portada y un catálogo para explorar la oferta de vehículos.',
+      explore: 'Conoce la estructura del portal y la presentación del catálogo de vehículos.',
+    },
     category: 'Marketplace',
     description: 'Marketplace desarrollado con Next.js.',
     technologies: ['Next.js'],
@@ -197,6 +150,11 @@ export const portfolio = [
   },
   {
     title: 'MamáSoyYo',
+    caseStudy: {
+      challenge: 'Presentar un espacio de bienestar para madres de forma cercana, clara y fácil de recorrer.',
+      solution: 'Una plataforma que organiza la propuesta de bienestar, sus servicios y talleres, con una identidad visual cálida.',
+      explore: 'Explora la presentación del espacio, los servicios y los talleres disponibles en la web.',
+    },
     category: 'Bienestar',
     description: 'Plataforma de bienestar y talleres.',
     technologies: [],

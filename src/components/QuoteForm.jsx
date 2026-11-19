@@ -12,6 +12,7 @@ const initialState = (service, plan) => ({
   budget: '',
   description: '',
   plan: plan || '',
+  preferredContact: 'email',
 })
 
 function QuoteForm({ initialService, initialPlan }) {
@@ -37,14 +38,15 @@ function QuoteForm({ initialService, initialPlan }) {
     '',
     'DATOS DE CONTACTO',
     `Nombre: ${formData.name.trim()}`,
-    `Empresa: ${formData.company.trim() || 'No indicada'}`,
-    `Correo: ${formData.email.trim()}`,
-    `WhatsApp: ${formData.whatsapp.trim()}`,
+    ...(formData.company.trim() ? [`Empresa: ${formData.company.trim()}`] : []),
+    ...(formData.email.trim() ? [`Correo: ${formData.email.trim()}`] : []),
+    ...(formData.whatsapp.trim() ? [`WhatsApp: ${formData.whatsapp.trim()}`] : []),
+    `Canal de contacto preferido: ${formData.preferredContact === 'email' ? 'Correo' : 'WhatsApp'}`,
     '',
     'DETALLES DEL PROYECTO',
     `Servicio requerido: ${formData.service}`,
     ...(formData.plan ? [`Plan de interés: ${formData.plan}`] : []),
-    `Presupuesto estimado: ${formData.budget}`,
+    `Presupuesto estimado: ${formData.budget || 'Por definir'}`,
     '',
     'Descripción:',
     formData.description.trim(),
@@ -63,13 +65,13 @@ function QuoteForm({ initialService, initialPlan }) {
     '',
     `Servicio: ${formData.service}`,
     ...(formData.plan ? [`Plan de interés: ${formData.plan}`] : []),
-    `Presupuesto estimado: ${formData.budget}`,
+    `Presupuesto estimado: ${formData.budget || 'Por definir'}`,
     '',
     formData.description.trim(),
     '',
     'Pueden contactarme a través de:',
     `Correo: ${formData.email.trim()}`,
-    `WhatsApp: ${formData.whatsapp.trim()}`,
+    ...(formData.whatsapp.trim() ? [`WhatsApp: ${formData.whatsapp.trim()}`] : []),
     '',
     'Gracias por su tiempo. Quedo pendiente de su respuesta.',
     formData.name.trim(),
@@ -77,6 +79,10 @@ function QuoteForm({ initialService, initialPlan }) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    if (formData.preferredContact === 'email') {
+      openComposer(event)
+      return
+    }
 
     const whatsappUrl = createWhatsAppUrl(buildQuoteMessage())
     const whatsappWindow = window.open(whatsappUrl, '_blank')
@@ -91,7 +97,7 @@ function QuoteForm({ initialService, initialPlan }) {
   }
 
   const openComposer = (event) => {
-    if (!event.currentTarget.form.reportValidity()) return
+    if (!(event.currentTarget.form || event.currentTarget).reportValidity()) return
     setDraft({ from: formData.email.trim(), subject: emailSubject, message: buildEmailMessage() })
     setEmailStatus({ type: '', message: '' })
     composerRef.current.showModal()
@@ -145,20 +151,20 @@ function QuoteForm({ initialService, initialPlan }) {
       {formData.plan && <p className="quote-plan-selection"><Check size={15} aria-hidden="true" />Plan de interés: {formData.plan}</p>}
 
       <form className="quote-form" onSubmit={handleSubmit}>
+        <fieldset className="quote-contact-choice">
+          <legend>¿Cómo prefieres contactarnos?</legend>
+          <label><input type="radio" name="preferredContact" value="email" checked={formData.preferredContact === 'email'} onChange={handleChange} /><Mail size={16} aria-hidden="true" /><span>Por correo</span></label>
+          <label><input type="radio" name="preferredContact" value="whatsapp" checked={formData.preferredContact === 'whatsapp'} onChange={handleChange} /><Send size={16} aria-hidden="true" /><span>Por WhatsApp</span></label>
+        </fieldset>
         <div className="form-grid">
           <label className="form-field">
             <span>Nombre <b aria-hidden="true">*</b></span>
             <input autoComplete="name" name="name" value={formData.name} onChange={handleChange} placeholder="Tu nombre" required />
           </label>
-          <label className="form-field">
-            <span>Empresa</span>
-            <input autoComplete="organization" name="company" value={formData.company} onChange={handleChange} placeholder="Nombre de tu empresa (opcional)" />
-          </label>
-          <label className="form-field">
+          {formData.preferredContact === 'email' ? <label className="form-field">
             <span>Correo electrónico <b aria-hidden="true">*</b></span>
             <input autoComplete="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="tu@correo.cl" required />
-          </label>
-          <label className="form-field">
+          </label> : <label className="form-field">
             <span>WhatsApp <b aria-hidden="true">*</b></span>
             <input
               autoComplete="tel"
@@ -171,19 +177,12 @@ function QuoteForm({ initialService, initialPlan }) {
               title="Ingresa un número de teléfono válido."
               required
             />
-          </label>
+          </label>}
           <label className="form-field">
             <span>Servicio requerido <b aria-hidden="true">*</b></span>
             <select name="service" value={formData.service} onChange={handleChange} required>
               <option value="">Selecciona un servicio</option>
               {quoteServices.map((service) => <option key={service} value={service}>{service}</option>)}
-            </select>
-          </label>
-          <label className="form-field">
-            <span>Presupuesto estimado <b aria-hidden="true">*</b></span>
-            <select name="budget" value={formData.budget} onChange={handleChange} required>
-              <option value="">Selecciona un rango</option>
-              {budgetOptions.map((budget) => <option key={budget} value={budget}>{budget}</option>)}
             </select>
           </label>
         </div>
@@ -200,14 +199,19 @@ function QuoteForm({ initialService, initialPlan }) {
           />
         </label>
 
+        <details className="quote-optional-details">
+          <summary>Agregar empresa o presupuesto <span>Opcional</span></summary>
+          <div className="form-grid">
+            <label className="form-field"><span>Empresa</span><input autoComplete="organization" name="company" value={formData.company} onChange={handleChange} placeholder="Nombre de tu empresa" /></label>
+            <label className="form-field"><span>Presupuesto estimado</span><select name="budget" value={formData.budget} onChange={handleChange}><option value="">Lo definimos en conjunto</option>{budgetOptions.map(budget => <option key={budget} value={budget}>{budget}</option>)}</select></label>
+          </div>
+        </details>
+
         <button className="submit-button" type="submit">
-          Preparar mensaje en WhatsApp <Send size={17} aria-hidden="true" />
-        </button>
-        <button className="submit-button submit-button-email" type="button" onClick={openComposer}>
-          Redactar correo <Mail size={17} aria-hidden="true" />
+          {formData.preferredContact === 'email' ? 'Revisar y enviar correo' : 'Preparar mensaje en WhatsApp'} <Send size={17} aria-hidden="true" />
         </button>
         <p className="form-privacy">
-          La solicitud se dirige a {brand.email}. Revisa el mensaje antes de enviarlo por WhatsApp o desde esta página.
+          {formData.preferredContact === 'email' ? `Revisa tu mensaje antes de enviarlo a ${brand.email}.` : 'WhatsApp abrirá tu solicitud para que la revises y la envíes.'} No necesitas tener un presupuesto definido para conversar.
         </p>
         {statusMessage && (
           <p className="form-status" role="status">
